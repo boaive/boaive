@@ -77,6 +77,14 @@ node scripts/qa/page.mjs http://localhost:3000/work .qa/archive 390 844
 
 Screenshots land in `.qa/` (git-ignored). `RM=1` emulates reduced motion.
 
+Frame cost per chapter (fps, main-thread and GPU ms, draw calls) on a phone-sized viewport — run it against a production build:
+
+```bash
+node scripts/qa/perf.mjs "http://localhost:3000/?quality=low"
+```
+
+On a real phone, open the site with `?debug`, stop where it feels slow, tap **Run test**, then **Copy report**.
+
 ## Deploying
 
 Any Node host works; Vercel is the simplest (`next build` output is fully static). Set `NEXT_PUBLIC_SITE_URL` to the production domain.

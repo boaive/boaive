@@ -43,7 +43,8 @@ Next.js 16 App Router (Turbopack) · React 19 · TypeScript · React Three Fiber
 - Declarative choreography (ScrollDirector): `data-beat="in,out"` (+ `data-dy`, `data-fade`), `data-rise` (+ `data-rise-compact` for ≤1200px), `data-progress` (→ `--p`), `data-steps`/`data-step` (→ `aria-current`). Layouts that need room (e.g. the Problem chapter's floating needs) switch to a stacked version at the same `COMPACT` breakpoint — test phones down to 320×568. Ranges come from `timing.ts`, which the 3D also imports — text and camera stay in sync. Beats are hidden via `.js [data-beat]` in `globals.css`.
 - Camera: `KeySpec` keys per world (`oceanTracks`, `digitalTracks`, `surfaceTracks`), Catmull-Rom, lens shift keeps subjects clear of the text (`projectionMatrix.elements[8] = -sx`, `[9] = -sy`); portrait uses `shiftPortrait`/`backPortrait`. Reduced motion holds still keys and cross-fades (`frame.t` is held, so derive scene state from `frame.t`, not wall-clock).
 - Two worlds in one scene: ocean at the origin, digital deep at `DIGITAL_ORIGIN (0,-400,0)`; swaps happen behind full-frame fills. Light count is constant (no shader recompiles); `gl.compileAsync` warm-up.
-- Quality tiers `high|medium|low` + adaptive DPR; `?3d=off` forces the CSS fallback, `?quality=low|medium|high` forces a tier.
+- Quality tiers `high|medium|low` (`quality.ts` budgets). `AdaptiveResolution` (`StageSystems.tsx`) starts at the tier's `dprStart`, steps the pixel ratio down on slow frames and up with headroom (never above the screen's), and settles after going back and forth. Phones (low) span 0.8–1.75× from 1.35×.
+- URL switches: `?3d=off` CSS fallback · `?quality=low|medium|high` force a tier · `?dpr=1.25` pin the pixel ratio · `?debug` diagnostics panel (GPU, errors, live canvas size/draw calls/frame ms, and **Run test**: fps as is, at 1× and 0.5×, and with drawing skipped — tells GPU-bound from script-bound on a real phone).
 
 ## Work: projects, featured, the archive
 
@@ -66,6 +67,9 @@ Next.js 16 App Router (Turbopack) · React 19 · TypeScript · React Three Fiber
 - **drei `Environment`** pulls EXR/RGBE/gain-map loaders into the bundle; use `StudioEnvironment` (custom PMREM).
 - GLSL: `active` is reserved; no backticks inside GLSL template literals.
 - CSS Modules require a local class in every selector — global attribute selectors (`[data-beat]`, `html.dialog-open`) live in `globals.css`.
+- **CSS order**: `import "./globals.css"` must stay the first import in `app/layout.tsx`. Module classes override the global type utilities (`.t-display`, `.mono`, `.t-lede`…) at equal specificity, so only order decides; imported later, the production build put globals last and every heading size silently changed (dev looked right). Verify styling on `next build` + `next start`, not only dev.
+- Performance (phones): a `transparent` + `DoubleSide` material is drawn twice and re-checks its shader program every frame — set `forceSinglePass: true` on flat or additive surfaces. Instanced meshes updated per frame get `instanceMatrix-usage={DynamicDrawUsage}` and skip updates while hidden; digital objects idle on their `*State.presence` (zeroed while the ocean is on screen) and `WaterFX` rests outside the ocean. Don't use drei `PerformanceMonitor` with `flipflops`: it counts every adjustment and drops smooth devices to the minimum ratio.
+- GLSL on phones: no `pow()` of negatives, no `smoothstep` with edge0 ≥ edge1, guard `normalize`/`asin`, avoid `sin()` hashes (see `grain()`); these are undefined behaviour that desktop GPUs forgive.
 - A page with a `position: fixed` backdrop at negative z-index needs `isolation: isolate` on its wrapper, or the body background paints over it.
 - `ProjectDialog` adds `html.dialog-open` (hides `main`); it removes it on unmount too — keep that if you change navigation out of the dialog.
 - ESLint: `react-hooks/immutability` is off for `src/experience/**` (three.js objects are mutated in `useFrame` by design). Avoid `Math.random` in render (use `hash()`).
@@ -77,7 +81,9 @@ WebGL screenshots need a real GPU in headless Chrome: `--use-angle=d3d11 --enabl
 
 - `node scripts/qa/story.mjs <url> <outPrefix> <w> <h> <chapter:progress>...` — story screenshots (`RM=1` for reduced motion). e.g. `node scripts/qa/story.mjs http://localhost:3000/ .qa/work 1440 900 work:0.2 work:0.95`
 - `node scripts/qa/page.mjs <url> <outPrefix> <w> <h> [hoverSelector]` — flowing pages: scrolls to trigger reveals, full-page shot, optional hover (`SHOTS=1` for per-screen shots).
-- Check desktop (1440×900, 1920×1000, short 1366×700), tablet and phone (390×844) plus `RM=1` and `?3d=off`.
+- `node scripts/qa/perf.mjs <url> [w] [h] [chapter:progress...]` — per-point fps, main-thread ms, GPU ms (timer queries), draw calls and triangles at fixed pixel ratios; defaults to a phone (392×840 @2.75). `CPU=6` throttles the main thread to roughly a mid-range phone. Profile the production build (`next build && next start`).
+- Check desktop (1440×900, 1920×1000, short 1366×700), tablet and phone (390×844, `DPR=2.75`) plus `RM=1` and `?3d=off`.
+- Real devices: open `/?debug`, park where it's slow, tap **Run test**, then **Copy report**.
 
 ## Open items
 
