@@ -1,0 +1,74 @@
+.chapter {
+  position: relative;
+  z-index: var(--z-content);
+}
+
+.pinned {
+  height: calc(var(--len-d) * 100svh);
+}
+
+.flow {
+  min-height: calc(var(--len-d) * 100svh);
+}
+
+@media (max-width: 720px) {
+  .pinned {
+    height: calc(var(--len-m) * 100svh);
+  }
+
+  .flow {
+    min-height: calc(var(--len-m) * 100svh);
+  }
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  width: 100%;
+  overflow: clip;
+  padding: calc(var(--header-h) + var(--space-5)) var(--gutter) var(--space-7);
+}
+
+/* Without JS the story can't play: stages flow as ordinary content. */
+:global(html:not(.js)) .pinned {
+  height: auto;
+  min-height: 100svh;
+}
+
+:global(html:not(.js)) .stage {
+  position: relative;
+  height: auto;
+  min-height: 100svh;
+}
+
+/* Beats share one grid cell so they can replace each other in place. */
+.beats {
+  display: grid;
+}
+
+:global(.js) .beats > * {
+  grid-area: 1 / 1;
+}
+
+:global(html:not(.js)) .beats {
+  gap: var(--space-7);
+}
+
+/* ── Chapter label ─────────────────────────────────────────── */
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8em;
+  color: var(--fg-muted);
+}
+
+.labelNumber {
+  color: var(--accent-soft);
+}
+
+.labelRule {
+  width: 2.5rem;
+  height: 1px;
+  background: var(--line-strong);
+}

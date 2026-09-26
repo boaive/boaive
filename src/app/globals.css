@@ -1,0 +1,237 @@
+@import "../styles/tokens.css";
+
+/* ── Reset ─────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  color-scheme: dark;
+  background: var(--bg);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-variation-settings: "wdth" var(--wdth-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* clip (not hidden) so position: sticky keeps working */
+  overflow-x: clip;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 500;
+  line-height: var(--lh-snug);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: var(--ember-500);
+  color: var(--ember-ink);
+}
+
+/* ── Focus ─────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: var(--radius-xs);
+}
+
+/* ── Smooth scroll (Lenis) ─────────────────────────────────── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* ── Story choreography (see components/motion/ScrollDirector) ─ */
+/* Beats stay hidden until the choreography reveals them — only when JS runs. */
+.js [data-beat]:not([data-beat^="0,"]) {
+  opacity: 0;
+}
+
+[data-beat] {
+  will-change: opacity, transform;
+}
+
+html.dialog-open {
+  overflow: hidden;
+}
+
+/* While a case study is open, the story steps back so the project's screen can be seen. */
+main {
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+html.dialog-open main {
+  opacity: 0;
+}
+
+/* ── Utilities ─────────────────────────────────────────────── */
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.accent {
+  color: var(--accent-soft);
+}
+
+/* ── Type scale ────────────────────────────────────────────── */
+.t-display {
+  font-size: var(--fs-display);
+  font-weight: 460;
+  line-height: 0.9;
+  letter-spacing: var(--tracking-display);
+  font-variation-settings: "wdth" var(--wdth-display);
+}
+
+.t-h1 {
+  font-size: var(--fs-h1);
+  font-weight: 460;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+  font-variation-settings: "wdth" var(--wdth-display);
+}
+
+.t-h2 {
+  font-size: var(--fs-h2);
+  font-weight: 460;
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+  font-variation-settings: "wdth" var(--wdth-heading);
+}
+
+.t-h3 {
+  font-size: var(--fs-h3);
+  font-weight: 480;
+  line-height: 1.06;
+  letter-spacing: var(--tracking-tight);
+  font-variation-settings: "wdth" var(--wdth-heading);
+}
+
+.t-h4 {
+  font-size: var(--fs-h4);
+  font-weight: 480;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  font-variation-settings: "wdth" 104;
+}
+
+.t-lede {
+  font-size: var(--fs-lede);
+  line-height: 1.45;
+  color: var(--fg-muted);
+}
+
+.t-small {
+  font-size: var(--fs-small);
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+
+/* Soft shadow that keeps type legible over bright 3D frames without boxes. */
+.legible {
+  text-shadow:
+    0 1px 18px rgb(5 8 12 / 0.55),
+    0 0 2px rgb(5 8 12 / 0.35);
+}
+
+/* ── Reduced motion ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

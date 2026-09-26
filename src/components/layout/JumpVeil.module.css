@@ -1,0 +1,16 @@
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-veil);
+  background:
+    radial-gradient(120% 80% at 50% 0%, color-mix(in srgb, var(--sea-700) 55%, transparent), transparent 70%),
+    var(--ink-950);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 420ms var(--ease-in-out);
+}
+
+.veil[data-state="in"] {
+  opacity: 1;
+  transition-duration: 300ms;
+}

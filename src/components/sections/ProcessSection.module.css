@@ -1,0 +1,157 @@
+.stage {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--space-5);
+}
+
+.label,
+.beats,
+.rail {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.beats {
+  min-height: 0;
+}
+
+.intro {
+  align-self: center;
+  max-width: 38rem;
+}
+
+.introText {
+  margin-top: var(--space-5);
+  max-width: 30rem;
+}
+
+/* Step text on the left; the transforming object sits centre-right. */
+.step {
+  align-self: center;
+  max-width: 31rem;
+}
+
+.number {
+  color: var(--fg-muted);
+  margin-bottom: var(--space-4);
+}
+
+.name {
+  font-size: clamp(2.6rem, 1.4rem + 4.6vw, 6.2rem);
+}
+
+.description {
+  margin-top: var(--space-5);
+  max-width: 27rem;
+  color: var(--bone-100);
+}
+
+.deliverable {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: var(--space-6);
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--accent);
+  max-width: 26rem;
+  font-size: var(--fs-small);
+}
+
+.deliverable :global(.mono) {
+  color: var(--accent-soft);
+  font-size: var(--fs-micro);
+}
+
+/* Progress rail along the bottom: fills as the product is built. */
+.rail {
+  position: relative;
+}
+
+.railTrack {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -0.5px;
+  height: 2px;
+  background: var(--line);
+}
+
+.railFill {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform-origin: left center;
+  transform: scaleX(clamp(0, calc((var(--p, 0) - var(--rail-start)) / var(--rail-span)), 1));
+}
+
+.railNav ol {
+  display: flex;
+}
+
+.railNav li {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.railNav button {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  width: 100%;
+  padding: 0.95rem 0.5rem 0.1rem 0;
+  font-size: var(--fs-small);
+  color: var(--fg-subtle);
+  text-align: left;
+  transition: color var(--dur) var(--ease-out);
+}
+
+.railNav button::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ink-950);
+  border: 1px solid var(--line-strong);
+  transition:
+    background-color var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+
+.railNav button:hover {
+  color: var(--fg);
+}
+
+.railNav li[aria-current] button {
+  color: var(--fg);
+}
+
+.railNav li[aria-current] button::before {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.railNav button :global(.mono) {
+  font-size: var(--fs-micro);
+}
+
+@media (max-width: 720px) {
+  .step {
+    align-self: end;
+  }
+
+  .description {
+    margin-top: var(--space-3);
+  }
+
+  .deliverable {
+    margin-top: var(--space-4);
+  }
+
+  .railNav button span:not(:global(.mono)) {
+    display: none;
+  }
+}

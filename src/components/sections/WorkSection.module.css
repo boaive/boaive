@@ -1,0 +1,232 @@
+.stage {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--space-5);
+}
+
+.head,
+.beats,
+.index {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.group {
+  display: grid;
+  justify-items: end;
+  color: var(--fg-muted);
+}
+
+.group > * {
+  grid-area: 1 / 1;
+}
+
+.sampleDot {
+  color: var(--sea-200);
+}
+
+.beats {
+  min-height: 0;
+}
+
+.intro {
+  align-self: center;
+  max-width: 38rem;
+}
+
+.introText {
+  margin-top: var(--space-5);
+  max-width: 32rem;
+}
+
+/* Text left; the project's 3D screen owns the right. */
+.project {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: var(--space-7);
+  min-height: 0;
+}
+
+.projectText {
+  max-width: 31rem;
+}
+
+.projectMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--fg-muted);
+  margin-bottom: var(--space-4);
+}
+
+.title {
+  font-size: clamp(2.2rem, 1.3rem + 3vw, 4.4rem);
+}
+
+.type {
+  margin-top: var(--space-3);
+  color: var(--fg-muted);
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+.summary {
+  margin-top: var(--space-5);
+  font-size: var(--fs-lede);
+  line-height: 1.45;
+  color: var(--bone-100);
+}
+
+.disclaimer {
+  margin-top: var(--space-4);
+  padding-left: var(--space-3);
+  border-left: 1px solid var(--sea-400);
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+  max-width: 27rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-5);
+  margin-top: var(--space-6);
+}
+
+/* Fallback poster when the 3D stage isn't running. */
+.poster {
+  display: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: 0 30px 80px -30px rgb(0 0 0 / 0.7);
+}
+
+.poster img {
+  width: 100%;
+  height: auto;
+}
+
+:global(html:not([data-stage="ready"])) .poster {
+  display: block;
+}
+
+.screenHit {
+  display: none;
+}
+
+:global(html[data-stage="ready"]) .screenHit {
+  display: block;
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  cursor: pointer;
+}
+
+/* Project index */
+.index ol {
+  display: flex;
+  border-top: 1px solid var(--line);
+}
+
+.index li {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.index li:nth-child(2) {
+  border-left: 1px solid var(--line);
+  padding-left: var(--space-4);
+}
+
+.index button {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  padding: 0.85rem 0.75rem 0.1rem 0;
+  font-size: var(--fs-small);
+  color: var(--fg-subtle);
+  text-align: left;
+  border-top: 2px solid transparent;
+  margin-top: -1px;
+  transition:
+    color var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+
+.index button > span:last-child {
+  font-size: 0.625rem;
+  opacity: 0.75;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  transform: translateY(-0.1rem);
+}
+
+.index button:hover {
+  color: var(--fg);
+}
+
+.index li[aria-current] button {
+  color: var(--fg);
+  border-color: var(--accent);
+}
+
+.index button :global(.mono) {
+  font-size: var(--fs-micro);
+}
+
+@media (max-width: 900px) {
+  .project {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: var(--space-4);
+    align-items: end;
+    height: 100%;
+  }
+
+  .projectText {
+    grid-row: 2;
+  }
+
+  .poster {
+    grid-row: 1;
+    align-self: center;
+  }
+
+  :global(html[data-stage="ready"]) .screenHit {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .summary {
+    margin-top: var(--space-3);
+    font-size: 1rem;
+  }
+
+  .disclaimer {
+    display: none;
+  }
+
+  .actions {
+    margin-top: var(--space-4);
+    gap: var(--space-4);
+  }
+
+  .index {
+    display: none;
+  }
+}

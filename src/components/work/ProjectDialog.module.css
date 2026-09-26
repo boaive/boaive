@@ -1,0 +1,146 @@
+.dialog {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(48rem, 100vw);
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0 0 0 auto;
+  padding: 0;
+  border: 0;
+  border-left: 1px solid var(--line);
+  background: var(--ink-900);
+  color: var(--fg);
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    transform var(--dur-slow) var(--ease-out),
+    opacity var(--dur-slow) var(--ease-out),
+    overlay var(--dur-slow) allow-discrete,
+    display var(--dur-slow) allow-discrete;
+}
+
+.dialog:not([open]) {
+  opacity: 0;
+  transform: translateX(6%);
+}
+
+@starting-style {
+  .dialog[open] {
+    opacity: 0;
+    transform: translateX(6%);
+  }
+}
+
+/* Keep the 3D push-in visible on the left. */
+.dialog::backdrop {
+  background: linear-gradient(to left, rgb(5 8 12 / 0.72), rgb(5 8 12 / 0.12) 70%);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    overlay var(--dur-slow) allow-discrete,
+    display var(--dur-slow) allow-discrete;
+}
+
+@starting-style {
+  .dialog[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+.panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100%;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  height: 4rem;
+  padding: 0 var(--space-4) 0 var(--space-6);
+  border-bottom: 1px solid var(--line);
+  color: var(--fg-muted);
+}
+
+.barActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.pageLink {
+  font-size: var(--fs-micro);
+  color: var(--fg-muted);
+  border-bottom: 1px solid var(--line-strong);
+  padding: 0.2rem 0;
+}
+
+.pageLink:hover {
+  color: var(--fg);
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  color: var(--fg);
+  transition: border-color var(--dur) var(--ease-out);
+}
+
+.close:hover {
+  border-color: var(--bone-50);
+}
+
+.scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-7) var(--space-6) var(--space-9);
+}
+
+.next {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+  width: 100%;
+  margin-top: var(--space-9);
+  padding: var(--space-6) 0 0;
+  border-top: 1px solid var(--line-strong);
+  text-align: left;
+  color: var(--fg);
+}
+
+.next > :global(.mono) {
+  color: var(--fg-muted);
+}
+
+.nextTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: var(--fs-h3);
+  font-variation-settings: "wdth" 108;
+  line-height: 1.05;
+}
+
+.next:hover .nextTitle {
+  color: var(--ember-300);
+}
+
+@media (max-width: 720px) {
+  .dialog {
+    border-left: 0;
+  }
+
+  .bar {
+    padding-left: var(--space-4);
+  }
+
+  .scroll {
+    padding: var(--space-6) var(--space-4) var(--space-8);
+  }
+}

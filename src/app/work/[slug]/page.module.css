@@ -1,0 +1,64 @@
+.page {
+  position: relative;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: calc(var(--header-h) + var(--space-7)) var(--gutter) var(--space-9);
+  display: grid;
+  gap: var(--space-9);
+}
+
+.page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(80% 45% at 50% -8%, rgb(40 90 110 / 0.3), transparent 70%),
+    linear-gradient(to bottom, #0a1a24, var(--ink-950) 60%);
+}
+
+.crumbs {
+  display: flex;
+  gap: var(--space-3);
+  color: var(--fg-muted);
+  font-size: var(--fs-micro);
+  margin-bottom: calc(var(--space-7) * -1);
+}
+
+.crumbs a:hover {
+  color: var(--fg);
+}
+
+.next {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--line-strong);
+}
+
+.next > :global(.mono) {
+  color: var(--fg-muted);
+}
+
+.nextLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.nextLink:hover {
+  color: var(--ember-300);
+}
+
+.cta {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-5);
+  padding: var(--space-8) 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.cta p {
+  max-width: 32rem;
+}

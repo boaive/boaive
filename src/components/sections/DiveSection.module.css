@@ -1,0 +1,66 @@
+.stage {
+  display: grid;
+}
+
+.beats {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.splash {
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+  font-size: var(--fs-h1);
+  line-height: 1;
+}
+
+.surface {
+  align-self: start;
+  justify-self: start;
+  max-width: 13ch;
+  margin-top: 8vh;
+}
+
+.deeper {
+  align-self: end;
+  justify-self: end;
+  max-width: 24rem;
+  margin-bottom: 8vh;
+  color: var(--bone-100);
+}
+
+.enter {
+  align-self: end;
+  justify-self: center;
+  margin-bottom: 4vh;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  color: var(--fg-muted);
+}
+
+.cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.1em;
+  background: var(--accent-soft);
+  animation: blink 1.1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .surface {
+    margin-top: 4vh;
+  }
+
+  .deeper {
+    margin-bottom: 4vh;
+  }
+}

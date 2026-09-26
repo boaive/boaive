@@ -1,0 +1,172 @@
+.stage {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--space-5);
+}
+
+.label,
+.beats,
+.index {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.beats {
+  min-height: 0;
+}
+
+.intro {
+  align-self: center;
+  max-width: 40rem;
+}
+
+.introText {
+  margin-top: var(--space-5);
+  max-width: 32rem;
+}
+
+/* Text on the left; the capability's 3D form owns the right half. */
+.capability {
+  align-self: center;
+  max-width: 30rem;
+}
+
+.count {
+  color: var(--fg-muted);
+  margin-bottom: var(--space-4);
+}
+
+.name {
+  font-size: clamp(3.2rem, 1.8rem + 6vw, 8.5rem);
+}
+
+.headline {
+  margin-top: var(--space-5);
+  font-size: var(--fs-h4);
+  font-weight: 480;
+  line-height: 1.2;
+  font-variation-settings: "wdth" 104;
+}
+
+.description {
+  margin-top: var(--space-3);
+  color: var(--fg-muted);
+  max-width: 26rem;
+}
+
+.items {
+  margin-top: var(--space-5);
+  border-top: 1px solid var(--line);
+  max-width: 24rem;
+}
+
+.items li {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-small);
+  color: var(--bone-100);
+}
+
+.items li::before {
+  content: "";
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  flex: none;
+}
+
+.close {
+  align-self: center;
+  max-width: 50rem;
+}
+
+.closeFollow {
+  margin-top: 0.3em;
+  font-size: var(--fs-h3);
+  line-height: 1.1;
+  color: var(--ember-300);
+}
+
+/* Index of the six capabilities along the bottom. */
+.index ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+
+.index li {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.index button {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  padding: 0.85rem 0.75rem 0.2rem 0;
+  text-align: left;
+  font-size: var(--fs-small);
+  color: var(--fg-subtle);
+  border-top: 2px solid transparent;
+  margin-top: -1px;
+  transition:
+    color var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+
+.index button:hover {
+  color: var(--fg);
+}
+
+.index li[aria-current] button {
+  color: var(--fg);
+  border-color: var(--accent);
+}
+
+.index button :global(.mono) {
+  font-size: var(--fs-micro);
+}
+
+@media (max-width: 720px) {
+  .capability {
+    align-self: end;
+  }
+
+  .name {
+    font-size: clamp(2.8rem, 1.6rem + 7vw, 4rem);
+  }
+
+  .headline {
+    margin-top: var(--space-3);
+  }
+
+  .items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    border: 0;
+    margin-top: var(--space-4);
+  }
+
+  .items li {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    padding: 0.3rem 0.7rem;
+    font-size: 0.8rem;
+  }
+
+  .items li::before {
+    display: none;
+  }
+
+  .index {
+    display: none;
+  }
+}

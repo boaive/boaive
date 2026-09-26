@@ -1,0 +1,126 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  height: 100lvh;
+  z-index: var(--z-canvas);
+  background: var(--ink-950);
+  pointer-events: none;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 900ms var(--ease-in-out);
+}
+
+.backdrop[data-scene="night"] .night,
+.backdrop[data-scene="underwater"] .underwater,
+.backdrop[data-scene="deep"] .deep,
+.backdrop[data-scene="dawn"] .dawn {
+  opacity: 1;
+}
+
+/* Blue hour at sea: the first frame of the 3D scene, in CSS. */
+.night {
+  background: linear-gradient(
+    to bottom,
+    #0b1622 0%,
+    #16263a 24%,
+    #2a3a4c 34%,
+    #6b5a55 35.8%,
+    #1b2a36 36.2%,
+    #0c1822 56%,
+    #060b10 100%
+  );
+}
+
+.horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 36%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgb(255 180 120 / 0.45), transparent);
+}
+
+.boat {
+  position: absolute;
+  left: 62%;
+  top: calc(36% - 5.6vw);
+  width: clamp(9rem, 15vw, 15rem);
+  height: auto;
+}
+
+.underwater {
+  background:
+    radial-gradient(90% 55% at 50% -10%, rgb(110 170 190 / 0.35), transparent 70%),
+    linear-gradient(to bottom, #0f3440 0%, #0a2230 45%, #061019 100%);
+}
+
+.deep {
+  background:
+    radial-gradient(70% 50% at 50% 0%, rgb(40 90 110 / 0.28), transparent 70%),
+    radial-gradient(40% 30% at 70% 60%, rgb(255 138 42 / 0.05), transparent 70%),
+    linear-gradient(to bottom, #0a1a24 0%, #060d14 55%, #04070b 100%);
+}
+
+.dawn {
+  background: linear-gradient(
+    to bottom,
+    #13253a 0%,
+    #3a4a60 16%,
+    #b27a5e 31%,
+    #f2a764 35.6%,
+    #3b3a42 36.2%,
+    #1b2530 56%,
+    #070c12 100%
+  );
+}
+
+.sun {
+  position: absolute;
+  left: 61%;
+  top: 36%;
+  width: 11vw;
+  aspect-ratio: 1;
+  transform: translate(-50%, -62%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff1d6 0 18%, rgb(255 170 90 / 0.55) 30%, transparent 68%);
+}
+
+@media (max-width: 720px) {
+  .night,
+  .dawn {
+    background-size: 100% 100%;
+  }
+
+  .night {
+    background: linear-gradient(to bottom, #0b1622 0%, #16263a 20%, #2a3a4c 28%, #6b5a55 29.8%, #1b2a36 30.2%, #0c1822 52%, #060b10 100%);
+  }
+
+  .dawn {
+    background: linear-gradient(to bottom, #13253a 0%, #3a4a60 12%, #b27a5e 25%, #f2a764 29.6%, #3b3a42 30.2%, #1b2530 52%, #070c12 100%);
+  }
+
+  .horizon {
+    top: 30%;
+  }
+
+  .boat {
+    left: 36%;
+    top: calc(30% - 12vw);
+    width: 40vw;
+  }
+
+  .sun {
+    top: 30%;
+    width: 30vw;
+  }
+}
+
+/* Once the 3D stage is running it paints over this; keep it out of the way. */
+:global(html[data-stage="ready"]) .backdrop {
+  visibility: hidden;
+  transition: visibility 0s 1s;
+}

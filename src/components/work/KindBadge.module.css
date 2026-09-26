@@ -1,0 +1,40 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  height: 1.7rem;
+  padding: 0 0.7rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+}
+
+.badge[data-kind="client"] {
+  background: color-mix(in srgb, var(--ember-500) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ember-500) 55%, transparent);
+  color: var(--ember-300);
+}
+
+.badge[data-kind="client"] .dot {
+  background: var(--ember-500);
+}
+
+.badge[data-kind="sample"],
+.badge[data-kind="experiment"] {
+  border: 1px dashed color-mix(in srgb, var(--sea-200) 55%, transparent);
+  color: var(--sea-200);
+}
+
+.badge[data-kind="sample"] .dot,
+.badge[data-kind="experiment"] .dot {
+  border: 1px solid var(--sea-200);
+}

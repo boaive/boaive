@@ -1,0 +1,157 @@
+.stage {
+  display: grid;
+  padding-bottom: clamp(3.5rem, 8vh, 6rem);
+}
+
+.beats {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/*
+ * Opening frame: sky and horizon (with the boat) in the top 40%, the promise in a band
+ * across the bottom — headline left, lede and actions right.
+ */
+.intro {
+  align-self: end;
+  display: grid;
+  grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+  align-items: end;
+  gap: var(--space-6) var(--space-7);
+}
+
+.eyebrow {
+  color: var(--fg-muted);
+  margin-bottom: var(--space-4);
+}
+
+.title {
+  font-size: clamp(2.6rem, 1.2rem + 4.6vw, 6.4rem);
+  max-width: 12ch;
+}
+
+.side {
+  padding-bottom: 0.6rem;
+}
+
+.lede {
+  font-size: var(--fs-lede);
+  line-height: 1.45;
+  color: var(--bone-100);
+  max-width: 26rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+/* Upper-left, while the camera closes in on the boat. */
+.floating {
+  align-self: start;
+  justify-self: start;
+  max-width: 15ch;
+  margin-top: clamp(1rem, 10vh, 8rem);
+  font-size: var(--fs-h2);
+  line-height: 1.02;
+}
+
+/* The tagline rests on the horizon of the opening shot, right of centre — beside the boat. */
+.tagline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--horizon, 36%);
+  transform: translateY(-50%);
+  text-align: center;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.62em;
+  padding-left: 0.62em;
+  color: color-mix(in srgb, var(--bone-50) 55%, transparent);
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.cue {
+  position: absolute;
+  left: 50%;
+  bottom: var(--space-4);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--fg-subtle);
+}
+
+.cue :global(.mono) {
+  font-size: var(--fs-micro);
+}
+
+.cueLine {
+  position: relative;
+  width: 1px;
+  height: 2.2rem;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.cueLine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent, var(--accent-soft), transparent);
+  transform: translateY(-100%);
+  animation: drip 2.4s var(--ease-in-out) infinite;
+}
+
+@keyframes drip {
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@media (max-width: 900px) {
+  .intro {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .title {
+    font-size: clamp(2.5rem, 1.4rem + 6vw, 4rem);
+  }
+
+  .side {
+    padding-bottom: 0;
+  }
+
+  .lede {
+    font-size: 1.02rem;
+  }
+
+  .floating {
+    margin-top: 12vh;
+  }
+}
+
+@media (max-width: 720px) {
+  .stage {
+    padding-bottom: var(--space-7);
+  }
+
+  .tagline {
+    --horizon: 24%;
+    letter-spacing: 0.42em;
+  }
+
+  .actions {
+    margin-top: var(--space-4);
+  }
+
+  .cue {
+    display: none;
+  }
+}

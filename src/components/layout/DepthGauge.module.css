@@ -1,0 +1,114 @@
+.gauge {
+  --h: min(38vh, 22rem);
+  position: fixed;
+  right: calc(var(--gutter) * 0.35);
+  top: 50%;
+  z-index: var(--z-gauge);
+  width: 1.5rem;
+  height: var(--h);
+  transform: translateY(-50%);
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+.gauge[data-hidden] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gauge::before {
+  content: "";
+  position: absolute;
+  right: 0.35rem;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--line);
+}
+
+.ticks {
+  position: absolute;
+  inset: 0;
+}
+
+.tick {
+  position: absolute;
+  right: 0;
+  top: calc(var(--i) * 100%);
+  transform: translateY(-50%);
+}
+
+.tick button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 1.5rem;
+  height: 1.25rem;
+}
+
+.tickLine {
+  width: 0.45rem;
+  height: 1px;
+  margin-right: 0.35rem;
+  background: var(--line-strong);
+  transition:
+    width var(--dur) var(--ease-out),
+    background-color var(--dur) var(--ease-out);
+}
+
+.tick button[aria-current] .tickLine {
+  width: 0.8rem;
+  background: var(--accent);
+}
+
+.tip {
+  position: absolute;
+  right: 1.9rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-xs);
+  background: var(--ink-900);
+  border: 1px solid var(--line);
+  font-size: var(--fs-micro);
+  white-space: nowrap;
+  color: var(--fg);
+  opacity: 0;
+  transform: translateX(4px);
+  pointer-events: none;
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.tick button:hover .tip,
+.tick button:focus-visible .tip {
+  opacity: 1;
+  transform: none;
+}
+
+.marker {
+  position: absolute;
+  right: calc(0.35rem - 3px);
+  top: calc(var(--f, 0) * 100%);
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ember-500) 22%, transparent);
+  pointer-events: none;
+}
+
+.readout {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.8rem);
+  font-size: 0.625rem;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+
+@media (max-width: 960px) {
+  .gauge {
+    display: none;
+  }
+}

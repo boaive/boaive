@@ -1,0 +1,19 @@
+.stage {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 100lvh;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+  opacity: 0;
+  animation: stage-in 1.2s var(--ease-out) 0.1s forwards;
+}
+
+.stage canvas {
+  display: block;
+}
+
+@keyframes stage-in {
+  to {
+    opacity: 1;
+  }
+}
