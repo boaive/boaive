@@ -31,12 +31,12 @@ void main() {
 
   // Blue-hour stars: sparse, faint, slightly twinkling. Gone by sunrise.
   if (uStars > 0.01 && dir.y > 0.02) {
-    vec2 sph = vec2(atan(dir.z, dir.x), asin(dir.y)) * 140.0;
+    vec2 sph = vec2(atan(dir.z, dir.x + 1e-6), asin(clamp(dir.y, -1.0, 1.0))) * 140.0;
     vec2 cell = floor(sph);
     float h = hash12(cell);
     vec2 offs = vec2(hash12(cell + 3.1), hash12(cell + 7.7)) - 0.5;
     float d = length(fract(sph) - 0.5 - offs * 0.6);
-    float star = step(0.985, h) * smoothstep(0.12, 0.0, d);
+    float star = step(0.985, h) * (1.0 - smoothstep(0.0, 0.12, d));
     star *= smoothstep(0.03, 0.35, dir.y) * (0.55 + 0.45 * sin(uTime * (0.8 + h * 2.0) + h * 50.0));
     col += vec3(0.85, 0.9, 1.0) * star * 0.75 * uStars;
   }

@@ -41,8 +41,9 @@ void main() {
   // waterline: a wobbling meniscus sweeping through the frame as the lens goes under
   if (uWaterline > 0.001) {
     float y = mix(1.15, -0.15, uWaterline) + sin(vUv.x * 11.0 + uTime * 3.0) * 0.025 + sin(vUv.x * 27.0 - uTime * 5.0) * 0.01;
-    float below = smoothstep(y + 0.01, y - 0.01, vUv.y);
-    float line = exp(-pow((vUv.y - y) * 90.0, 2.0));
+    float below = 1.0 - smoothstep(y - 0.01, y + 0.01, vUv.y);
+    float dy = (vUv.y - y) * 90.0;
+    float line = exp(-dy * dy);
     vec3 tint = vec3(0.04, 0.2, 0.24);
     col = col * (1.0 - below * 0.45) + tint * below * 0.45 + vec3(0.7, 0.85, 0.9) * line * 0.4;
     a = a + below * 0.45 * (1.0 - a) + line * 0.4 * (1.0 - a);

@@ -1,13 +1,20 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Component, type ReactNode, useEffect, useState } from "react";
+import { Component, type ReactNode, useEffect, useState, useSyncExternalStore } from "react";
 import { setStory } from "@/story/store";
+import { installDebugHooks } from "./debug";
 import { detectQuality, probeWebGL } from "./quality";
 import { setStageStatus } from "./status";
 
 /** The WebGL stage is a separate chunk, fetched only after the page is interactive. */
 const Stage = dynamic(() => import("./Stage"), { ssr: false });
+
+/** `?debug`: a copyable report of the device's GPU, errors and frame rate (never loaded otherwise). */
+const DebugPanel = dynamic(() => import("./DebugPanel"), { ssr: false });
+
+const noSubscription = () => () => {};
+const debugRequested = () => new URLSearchParams(window.location.search).has("debug");
 
 /** If the 3D chunk or renderer fails, fall back to the CSS story instead of a broken stage. */
 class StageBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
@@ -34,9 +41,13 @@ class StageBoundary extends Component<{ children: ReactNode }, { failed: boolean
  */
 export function Experience() {
   const [mount, setMount] = useState(false);
+  // false on the server and during hydration, then the real value
+  const debug = useSyncExternalStore(noSubscription, debugRequested, () => false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    // before the stage mounts, so first-compile shader errors are captured
+    if (params.has("debug")) installDebugHooks();
     if (params.get("3d") === "off") {
       setStageStatus("off");
       return;
@@ -59,9 +70,14 @@ export function Experience() {
     return () => clearTimeout(id);
   }, []);
 
-  return mount ? (
-    <StageBoundary>
-      <Stage />
-    </StageBoundary>
-  ) : null;
+  return (
+    <>
+      {mount ? (
+        <StageBoundary>
+          <Stage />
+        </StageBoundary>
+      ) : null}
+      {debug ? <DebugPanel /> : null}
+    </>
+  );
 }

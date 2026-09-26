@@ -31,7 +31,7 @@ uniform vec3 uColor;
 varying vec3 vN;
 varying vec3 vV;
 void main() {
-  float rim = pow(1.0 - abs(dot(vN, vV)), 2.2);
+  float rim = pow(max(1.0 - abs(dot(vN, vV)), 0.0), 2.2);
   float spec = pow(max(dot(reflect(-vV, vN), normalize(vec3(0.2, 1.0, 0.1))), 0.0), 40.0);
   float a = clamp(rim * 0.85 + spec * 0.9 + 0.04, 0.0, 1.0);
   gl_FragColor = vec4(uColor * (rim + spec * 1.5), a);

@@ -65,7 +65,8 @@ uniform vec3 uColor;
 uniform float uIntensity;
 varying vec2 vUv;
 void main() {
-  float band = exp(-pow((vUv.y - 0.5) * 7.0, 2.0));
+  float by = (vUv.y - 0.5) * 7.0;
+  float band = exp(-by * by);
   gl_FragColor = vec4(uColor * band * uIntensity, 1.0);
 }
 `;

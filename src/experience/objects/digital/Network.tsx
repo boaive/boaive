@@ -31,7 +31,8 @@ varying vec2 vUv;
 void main() {
   float drawn = step(vUv.x, uReveal);
   if (drawn < 0.5) discard;
-  float head = exp(-pow((uReveal - vUv.x) * 18.0, 2.0)) * step(uReveal, 0.999);
+  float hx = (uReveal - vUv.x) * 18.0;
+  float head = exp(-hx * hx) * step(uReveal, 0.999);
   float pulse = pow(max(0.0, sin((vUv.x - uTime * 0.35 - uOffset) * 18.0)), 24.0);
   vec3 col = uColor * 0.9 + uPulse * (pulse * 1.8 + head * 2.2);
   gl_FragColor = vec4(col * uOpacity, 1.0);

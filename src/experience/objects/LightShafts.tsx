@@ -28,9 +28,9 @@ varying vec2 vUv;
 varying float vFade;
 ${noiseGLSL}
 void main() {
-  float edge = smoothstep(0.0, 0.4, vUv.x) * smoothstep(1.0, 0.6, vUv.x);
+  float edge = smoothstep(0.0, 0.4, vUv.x) * (1.0 - smoothstep(0.6, 1.0, vUv.x));
   float n = fbm(vec2(vUv.x * 2.5 + uSeed + uTime * 0.03, vUv.y * 0.8 - uTime * 0.015));
-  float fall = pow(vUv.y, 1.8);
+  float fall = pow(max(vUv.y, 0.0), 1.8);
   float a = edge * fall * (0.35 + 0.65 * n) * uIntensity * vFade;
   gl_FragColor = vec4(uColor * a, a);
 }

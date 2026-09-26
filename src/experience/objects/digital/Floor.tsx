@@ -31,7 +31,7 @@ ${noiseGLSL}
 // 1 on integer values of h, anti-aliased to about px pixels wide
 float contour(float h, float px) {
   float d = abs(fract(h + 0.5) - 0.5);
-  float w = fwidth(h) * px;
+  float w = max(fwidth(h) * px, 1e-4); // equal edges are undefined in smoothstep
   return 1.0 - smoothstep(0.0, w, d);
 }
 

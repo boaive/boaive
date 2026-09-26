@@ -31,6 +31,26 @@ export function WorldTransitions() {
   return null;
 }
 
+/**
+ * Phones can drop the WebGL context (memory pressure, switching apps). three.js asks the browser
+ * to restore it; meanwhile the CSS story shows instead of a frozen or black canvas.
+ */
+export function ContextWatch() {
+  const gl = useThree((s) => s.gl);
+  useEffect(() => {
+    const canvas = gl.domElement;
+    const lost = () => setStageStatus("lost");
+    const restored = () => setStageStatus("ready");
+    canvas.addEventListener("webglcontextlost", lost);
+    canvas.addEventListener("webglcontextrestored", restored);
+    return () => {
+      canvas.removeEventListener("webglcontextlost", lost);
+      canvas.removeEventListener("webglcontextrestored", restored);
+    };
+  }, [gl]);
+  return null;
+}
+
 /** Lowers the pixel ratio when frames drop, raises it back when there's headroom. */
 export function AdaptiveResolution({ range }: { range: readonly [number, number] }) {
   const setDpr = useThree((s) => s.setDpr);

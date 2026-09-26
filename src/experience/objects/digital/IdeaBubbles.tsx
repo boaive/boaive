@@ -28,7 +28,7 @@ varying vec3 vV;
 varying float vSpark;
 void main() {
   float ndv = abs(dot(vN, vV));
-  float rim = pow(1.0 - ndv, 2.4);
+  float rim = pow(max(1.0 - ndv, 0.0), 2.4);
   // a small, sharp ember point at the centre of a few bubbles: the idea inside the problem
   float core = pow(ndv, 60.0) * vSpark;
   vec3 col = uRim * rim * 0.9 + uSpark * core * 1.2;

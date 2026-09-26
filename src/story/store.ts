@@ -12,7 +12,8 @@ import { chapterIndex, chapters, type ChapterId } from "./chapters";
  */
 
 export type Quality = "high" | "medium" | "low";
-export type StageStatus = "idle" | "loading" | "ready" | "unsupported" | "off";
+/** "lost": the GPU dropped the WebGL context (phones under memory pressure); the CSS story shows until it returns. */
+export type StageStatus = "idle" | "loading" | "ready" | "unsupported" | "off" | "lost";
 
 type Continuous = {
   /** chapterIndex + local progress (0 → chapters.length). */

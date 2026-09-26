@@ -1,6 +1,7 @@
 .stage {
   position: fixed;
   inset: 0 0 auto 0;
+  height: 100vh; /* browsers without lvh */
   height: 100lvh;
   z-index: var(--z-canvas);
   pointer-events: none;
@@ -10,6 +11,11 @@
 
 .stage canvas {
   display: block;
+}
+
+/* Context lost: step aside so the CSS backdrop and posters show instead of a frozen frame. */
+:global(html[data-stage="lost"]) .stage {
+  visibility: hidden;
 }
 
 @keyframes stage-in {

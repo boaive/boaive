@@ -12,7 +12,7 @@ import { MarineSnow } from "./objects/MarineSnow";
 import { budgets } from "./quality";
 import { DigitalWorld } from "./scenes/DigitalWorld";
 import { OceanWorld } from "./scenes/OceanWorld";
-import { AdaptiveResolution, WarmUp, WorldTransitions } from "./StageSystems";
+import { AdaptiveResolution, ContextWatch, WarmUp, WorldTransitions } from "./StageSystems";
 import { StoryClock } from "./StoryClock";
 import styles from "./Stage.module.css";
 
@@ -46,6 +46,7 @@ export default function Stage() {
         frameloop="always"
       >
         <SceneSetup />
+        <ContextWatch />
         <StoryClock />
         <CameraRig />
         <WorldTransitions />

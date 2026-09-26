@@ -2,7 +2,17 @@
 
 import { useThree } from "@react-three/fiber";
 import { useEffect } from "react";
-import { CircleGeometry, Color, DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry, PMREMGenerator, Scene } from "three";
+import {
+  CircleGeometry,
+  Color,
+  DoubleSide,
+  Mesh,
+  MeshBasicMaterial,
+  PlaneGeometry,
+  PMREMGenerator,
+  Scene,
+  type WebGLRenderTarget,
+} from "three";
 
 type Panel = { w: number; h: number; color: string; intensity: number; pos: [number, number, number]; rot: [number, number, number]; round?: boolean };
 
@@ -23,26 +33,41 @@ export function StudioEnvironment() {
   const scene = useThree((s) => s.scene);
 
   useEffect(() => {
-    const env = new Scene();
-    env.background = new Color("#0b1217");
-    const disposables: { dispose(): void }[] = [];
-    for (const p of PANELS) {
-      const geometry = p.round ? new CircleGeometry(p.w / 2, 32) : new PlaneGeometry(p.w, p.h);
-      const material = new MeshBasicMaterial({ color: new Color(p.color).multiplyScalar(p.intensity), side: DoubleSide });
-      const mesh = new Mesh(geometry, material);
-      mesh.position.set(...p.pos);
-      mesh.rotation.set(...p.rot);
-      env.add(mesh);
-      disposables.push(geometry, material);
-    }
-    const pmrem = new PMREMGenerator(gl);
-    const target = pmrem.fromScene(env, 0.04);
-    scene.environment = target.texture;
-    pmrem.dispose();
-    disposables.forEach((d) => d.dispose());
+    // PMREM renders into half-float targets. GPUs that can't (some phones) would produce garbage
+    // reflections, so they go without: the lights alone still read correctly.
+    const canBake = gl.extensions.has("EXT_color_buffer_float") || gl.extensions.has("EXT_color_buffer_half_float");
+    if (!canBake) return;
+
+    let target: WebGLRenderTarget | null = null;
+    const bake = () => {
+      const env = new Scene();
+      env.background = new Color("#0b1217");
+      const disposables: { dispose(): void }[] = [];
+      for (const p of PANELS) {
+        const geometry = p.round ? new CircleGeometry(p.w / 2, 32) : new PlaneGeometry(p.w, p.h);
+        const material = new MeshBasicMaterial({ color: new Color(p.color).multiplyScalar(p.intensity), side: DoubleSide });
+        const mesh = new Mesh(geometry, material);
+        mesh.position.set(...p.pos);
+        mesh.rotation.set(...p.rot);
+        env.add(mesh);
+        disposables.push(geometry, material);
+      }
+      const pmrem = new PMREMGenerator(gl);
+      target?.dispose();
+      target = pmrem.fromScene(env, 0.04);
+      scene.environment = target.texture;
+      pmrem.dispose();
+      disposables.forEach((d) => d.dispose());
+    };
+    bake();
+
+    // A restored context starts empty: bake the reflections again.
+    const canvas = gl.domElement;
+    canvas.addEventListener("webglcontextrestored", bake);
     return () => {
-      if (scene.environment === target.texture) scene.environment = null;
-      target.dispose();
+      canvas.removeEventListener("webglcontextrestored", bake);
+      if (target && scene.environment === target.texture) scene.environment = null;
+      target?.dispose();
     };
   }, [gl, scene]);
 

@@ -34,13 +34,13 @@ vec3 codeView(vec2 uv) {
   for (int i = 0; i < 3; i++) {
     vec2 c = vec2(0.035 + float(i) * 0.03, 0.965);
     float d = length((uv - c) * vec2(1.6, 1.0));
-    col = mix(col, vec3(0.32, 0.35, 0.4), bar * smoothstep(0.011, 0.007, d));
+    col = mix(col, vec3(0.32, 0.35, 0.4), bar * (1.0 - smoothstep(0.007, 0.011, d)));
   }
   // file tree
   float side = step(uv.x, 0.19) * (1.0 - bar);
   col = mix(col, vec3(0.04, 0.047, 0.06), side);
   float trow = floor((0.9 - uv.y) * 22.0);
-  float tline = smoothstep(0.3, 0.36, fract((0.9 - uv.y) * 22.0)) * smoothstep(0.7, 0.64, fract((0.9 - uv.y) * 22.0));
+  float tline = smoothstep(0.3, 0.36, fract((0.9 - uv.y) * 22.0)) * (1.0 - smoothstep(0.64, 0.7, fract((0.9 - uv.y) * 22.0)));
   float tw = 0.05 + h11(trow * 3.1) * 0.08;
   float tx = 0.025 + floor(h11(trow) * 2.0) * 0.02;
   float entry = step(tx, uv.x) * step(uv.x, tx + tw) * tline * side * step(trow, 17.0);
@@ -51,7 +51,7 @@ vec3 codeView(vec2 uv) {
   float y = (0.915 - uv.y) * rows + uTime * 0.35;
   float row = floor(y);
   float fy = fract(y);
-  float line = smoothstep(0.3, 0.37, fy) * smoothstep(0.7, 0.63, fy);
+  float line = smoothstep(0.3, 0.37, fy) * (1.0 - smoothstep(0.63, 0.7, fy));
   float empty = step(h11(row + 9.0), 0.16);
   float comment = step(0.84, h11(row + 5.0));
   float indent = floor(h11(row + 3.0) * 4.0) * 0.032;
@@ -104,15 +104,17 @@ vec3 portalView(vec2 uv) {
   // The digital deep, seen through the screen: ink below, light from far above.
   vec3 top = vec3(0.07, 0.19, 0.24);
   vec3 bottom = vec3(0.012, 0.03, 0.045);
-  vec3 col = mix(bottom, top, pow(uv.y, 1.6));
+  vec3 col = mix(bottom, top, pow(max(uv.y, 0.0), 1.6));
   float rays = 0.0;
   for (int i = 0; i < 5; i++) {
     float fi = float(i);
     float x = 0.18 + fi * 0.17 + sin(uTime * 0.2 + fi) * 0.02;
-    rays += exp(-pow((uv.x - x - (1.0 - uv.y) * 0.12) * 18.0, 2.0)) * (0.4 + 0.6 * h11(fi));
+    float rx = (uv.x - x - (1.0 - uv.y) * 0.12) * 18.0;
+    rays += exp(-rx * rx) * (0.4 + 0.6 * h11(fi));
   }
-  col += vec3(0.25, 0.45, 0.5) * rays * pow(uv.y, 2.0) * 0.35;
-  float horizon = exp(-pow((uv.y - 0.34) * 40.0, 2.0)) * (1.0 - abs(uv.x - 0.5) * 1.4);
+  col += vec3(0.25, 0.45, 0.5) * rays * uv.y * uv.y * 0.35;
+  float hy = (uv.y - 0.34) * 40.0;
+  float horizon = exp(-hy * hy) * (1.0 - abs(uv.x - 0.5) * 1.4);
   col += vec3(1.0, 0.55, 0.2) * max(horizon, 0.0) * 0.35;
   float motes = step(0.995, hash12(floor(uv * vec2(160.0, 100.0) + vec2(0.0, -uTime * 3.0))));
   col += vec3(0.8, 0.9, 1.0) * motes * 0.4;

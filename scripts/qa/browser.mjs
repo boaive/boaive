@@ -1,6 +1,7 @@
 /**
  * Shared headless Chrome launcher for visual QA.
  * WebGL needs the real GPU: ANGLE on D3D11 (Windows) with the GPU blocklist ignored.
+ * Env: RM=1 reduced motion, DPR=<n> device pixel ratio.
  */
 import { existsSync, mkdirSync } from "node:fs";
 import path from "node:path";
@@ -40,7 +41,8 @@ export async function openPage(browser, url, width, height) {
   });
   page.on("pageerror", (e) => logs.push(`[pageerror] ${e.message}`));
   const mobile = width < 700;
-  await page.setViewport({ width, height, deviceScaleFactor: 1, isMobile: mobile, hasTouch: mobile });
+  // DPR=3 emulates a phone's pixel density (canvas size, outline widths, memory)
+  await page.setViewport({ width, height, deviceScaleFactor: Number(process.env.DPR ?? 1), isMobile: mobile, hasTouch: mobile });
   if (process.env.RM) await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }]);
   await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
   return { page, logs };

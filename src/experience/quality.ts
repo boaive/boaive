@@ -1,10 +1,10 @@
 import type { Quality } from "@/story/store";
 
-/** Can this browser run the WebGL stage at all? */
+/** Can this browser run the WebGL stage at all? (three.js needs WebGL 2.) */
 export function probeWebGL(): { ok: boolean; software: boolean } {
   try {
     const canvas = document.createElement("canvas");
-    const gl = (canvas.getContext("webgl2") ?? canvas.getContext("webgl")) as WebGLRenderingContext | null;
+    const gl = canvas.getContext("webgl2");
     if (!gl) return { ok: false, software: false };
     const info = gl.getExtension("WEBGL_debug_renderer_info");
     const renderer = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : "";
@@ -64,9 +64,11 @@ export const budgets = {
     grain: true,
     outlines: true,
   },
+  // Phones: fewer things drawn, but a sharp picture. Their 2–3× screens made 1.2× look jagged next to
+  // the ink outlines, and MSAA is cheap on mobile (tile-based) GPUs. AdaptiveResolution steps down if needed.
   low: {
-    dpr: [0.8, 1.2] as [number, number],
-    antialias: false,
+    dpr: [1, 1.75] as [number, number],
+    antialias: true,
     oceanRings: 64,
     oceanSegments: 96,
     particles: 420,

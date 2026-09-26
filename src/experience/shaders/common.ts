@@ -58,14 +58,17 @@ vec3 skyColor(vec3 dir) {
   col += uGlow * (band + veil);
   float sd = max(dot(dir, uSunDir), 0.0);
   col += uSunColor * uSunSize * (smoothstep(0.99955, 0.99975, sd) * 14.0 + pow(sd, 90.0) * 1.1 + pow(sd, 12.0) * 0.12);
-  col = mix(col, uHorizon * 0.55, smoothstep(0.0, -0.1, h));
+  col = mix(col, uHorizon * 0.55, 1.0 - smoothstep(-0.1, 0.0, h));
   return col;
 }
 `;
 
 /** Film grain helper for overlays. */
 export const grainGLSL = /* glsl */ `
+// sine-free: sin() of large arguments is imprecise on mobile GPUs and shows up as stripes
 float grain(vec2 uv, float t) {
-  return fract(sin(dot(uv * vec2(12.9898, 78.233) + t, vec2(1.0, 1.0))) * 43758.5453);
+  vec3 p3 = fract(vec3(uv.xyx + t) * 0.1031);
+  p3 += dot(p3, p3.yzx + 33.33);
+  return fract((p3.x + p3.y) * p3.z);
 }
 `;

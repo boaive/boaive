@@ -27,7 +27,8 @@ void main() {
   float age = uRipple.z;
   float front = age * 1.6;
   float envelope = uRipple.w * exp(-age * 0.45) * smoothstep(0.0, 0.25, age);
-  float ring = exp(-pow((r - front) * 2.6, 2.0));
+  float rr = (r - front) * 2.6;
+  float ring = exp(-rr * rr);
   float wavelet = sin((r - front) * 11.0) * exp(-max(front - r, 0.0) * 1.4) * step(r, front + 0.6);
   p.y += (ring * 0.05 + wavelet * 0.018) * envelope;
   vFoam = ring * envelope;
@@ -79,7 +80,8 @@ float wakeFoam(vec2 p) {
   float across = dot(rel, side);
   if (along < -1.6) return 0.0;
   float spread = max(along, 0.0) * 0.36 + 0.55;
-  float arms = exp(-pow((abs(across) - spread) * 3.2, 2.0));
+  float ax = (abs(across) - spread) * 3.2;
+  float arms = exp(-ax * ax);
   float centre = exp(-across * across * 5.0) * exp(-max(along, 0.0) * 0.12);
   float fade = exp(-max(along, 0.0) * 0.045) * smoothstep(-1.6, 0.0, along);
   float breakup = smoothstep(0.35, 0.75, fbm(p * 2.6 + vec2(uTime * 0.4, 0.0)));
@@ -99,7 +101,7 @@ void main() {
   if (fromAbove) {
     // ── Seen from above ────────────────────────────────────
     float ndv = max(dot(N, V), 0.0);
-    float fres = 0.02 + 0.98 * pow(1.0 - ndv, 5.0);
+    float fres = 0.02 + 0.98 * pow(max(1.0 - ndv, 0.0), 5.0);
     vec3 R = reflect(-V, N);
     R.y = abs(R.y);
     vec3 refl = skyColor(normalize(R));
@@ -111,7 +113,7 @@ void main() {
     float glitter = smoothstep(0.55, 0.9, fbm(vWorld.xz * 3.0 + uTime * 0.3));
     col += uSunColor * uSunSize * (pow(sd, 420.0) * 6.0 + pow(sd, 40.0) * 0.35 * glitter);
     // Warm band of the sky glow on the water toward the horizon.
-    col += uGlow * pow(max(dot(normalize(vec2(-V.x, -V.z)), normalize(uSunDir.xz)), 0.0), 18.0) * fres * 0.3;
+    col += uGlow * pow(max(dot(normalize(vec2(-V.x, -V.z) + 1e-5), normalize(uSunDir.xz + 1e-5)), 0.0), 18.0) * fres * 0.3;
 
     // Light from the laptop screen, reflected on the water around the boat.
     float gd = distance(vWorld.xz, uGlowPos.xz);
@@ -134,7 +136,8 @@ void main() {
     vec3 T = refract(I, -Nw, 1.333);
     vec3 through = skyColor(normalize(dot(T, T) > 0.0 ? T : vec3(I.x, 0.05, I.z)));
     vec3 lit = through * 0.8 + uUnderShallow * 0.35;
-    float rim = exp(-pow((cosUp - 0.665) * 28.0, 2.0)) * 0.25;
+    float cu = (cosUp - 0.665) * 28.0;
+    float rim = exp(-cu * cu) * 0.25;
     vec3 tir = uUnderFog * 1.1 + uUnderShallow * 0.12;
     col = mix(tir, lit, window) + uUnderShallow * rim;
     col += vec3(0.8, 0.95, 1.0) * vFoam * 0.3;
