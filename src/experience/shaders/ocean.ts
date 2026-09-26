@@ -61,13 +61,38 @@ varying float vFoam;
 ${noiseGLSL}
 ${skyGLSL}
 
+// Gradient of vnoise (same lattice and hash), analytically.
+vec2 vnoiseGrad(vec2 p) {
+  vec2 i = floor(p);
+  vec2 f = fract(p);
+  vec2 u = f * f * (3.0 - 2.0 * f);
+  vec2 du = 6.0 * f * (1.0 - f);
+  float a = hash12(i);
+  float b = hash12(i + vec2(1.0, 0.0));
+  float c = hash12(i + vec2(0.0, 1.0));
+  float d = hash12(i + vec2(1.0, 1.0));
+  float k = a - b - c + d;
+  return du * (vec2(b - a, c - a) + k * u.yx);
+}
+
+// Slope of fbm(): 4 noise lookups instead of the 12 that three finite-difference taps cost —
+// the water's most expensive line on phones. Weights = octave amplitude × frequency, eased to
+// match the old taps (0.06 apart), which averaged away part of the finest octave's slope.
+vec2 fbmSlope(vec2 p) {
+  const vec2 shift = vec2(17.1, 9.2);
+  vec2 d = 0.499 * vnoiseGrad(p);
+  p = p * 2.03 + shift;
+  d += 0.504 * vnoiseGrad(p);
+  p = p * 2.03 + shift;
+  d += 0.503 * vnoiseGrad(p);
+  p = p * 2.03 + shift;
+  d += 0.476 * vnoiseGrad(p);
+  return d;
+}
+
 vec3 detailNormal(vec2 p, float fade) {
   vec2 q = p * 0.75 + uTime * vec2(0.035, 0.022);
-  float e = 0.06;
-  float h0 = fbm(q);
-  float hx = fbm(q + vec2(e, 0.0));
-  float hz = fbm(q + vec2(0.0, e));
-  vec2 slope = vec2(hx - h0, hz - h0) / e;
+  vec2 slope = fbmSlope(q);
   return vec3(-slope.x, 0.0, -slope.y) * 0.22 * fade;
 }
 

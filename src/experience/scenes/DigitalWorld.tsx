@@ -47,7 +47,11 @@ export function DigitalWorld({ budget }: { budget: Budget }) {
 
     const active = frame.world === "digital";
     if (root.current) root.current.visible = active;
-    if (!active) return;
+    if (!active) {
+      // everything here idles on presence: without this the last values stick and hidden objects keep animating
+      bubblesState.opacity = formsState.presence = buildState.presence = galleryState.presence = networkState.presence = 0;
+      return;
+    }
 
     const studioT = timeAt("studio", 0);
     const endT = moments.surfaceSwap;

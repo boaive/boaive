@@ -1,10 +1,11 @@
 "use client";
 
 import { Canvas, useThree } from "@react-three/fiber";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useMemo } from "react";
 import { Color, FogExp2, NeutralToneMapping } from "three";
 import { useStory } from "@/story/store";
 import { CameraRig } from "./camera/CameraRig";
+import { DebugProbe } from "./DebugProbe";
 import { ScreenFX } from "./fx/ScreenFX";
 import { Lighting } from "./Lighting";
 import { LightShafts } from "./objects/LightShafts";
@@ -12,7 +13,7 @@ import { MarineSnow } from "./objects/MarineSnow";
 import { budgets } from "./quality";
 import { DigitalWorld } from "./scenes/DigitalWorld";
 import { OceanWorld } from "./scenes/OceanWorld";
-import { AdaptiveResolution, ContextWatch, WarmUp, WorldTransitions } from "./StageSystems";
+import { AdaptiveResolution, ContextWatch, initialDpr, WarmUp, WorldTransitions } from "./StageSystems";
 import { StoryClock } from "./StoryClock";
 import styles from "./Stage.module.css";
 
@@ -26,15 +27,16 @@ function SceneSetup() {
   return null;
 }
 
-/** The single WebGL canvas behind the whole story. */
-export default function Stage() {
+/** The single WebGL canvas behind the whole story. `debug` adds the live probe for ?debug. */
+export default function Stage({ debug = false }: { debug?: boolean }) {
   const quality = useStory("quality");
   const budget = budgets[quality];
+  const dpr = useMemo(() => initialDpr(budget.dpr, budget.dprStart), [budget]);
 
   return (
     <div className={styles.stage} aria-hidden="true">
       <Canvas
-        dpr={budget.dpr}
+        dpr={dpr}
         gl={{
           antialias: budget.antialias,
           powerPreference: "high-performance",
@@ -59,7 +61,8 @@ export default function Stage() {
         <MarineSnow count={budget.particles} />
         <LightShafts count={budget.shafts} />
         <ScreenFX grain={budget.grain} />
-        <AdaptiveResolution range={budget.dpr} />
+        <AdaptiveResolution range={budget.dpr} start={dpr} />
+        {debug ? <DebugProbe /> : null}
       </Canvas>
     </div>
   );

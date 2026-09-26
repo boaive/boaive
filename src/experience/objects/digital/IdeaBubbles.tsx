@@ -2,7 +2,7 @@
 
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
-import { Color, type InstancedMesh, Matrix4, ShaderMaterial, SphereGeometry, Vector3 } from "three";
+import { Color, DynamicDrawUsage, type InstancedMesh, Matrix4, ShaderMaterial, SphereGeometry, Vector3 } from "three";
 import { frame } from "../../frame";
 import { hash } from "../../math";
 
@@ -90,7 +90,7 @@ export function IdeaBubbles({ count = 26 }: { count?: number }) {
   }, [count]);
 
   return (
-    <instancedMesh ref={ref} args={[assets.geometry, assets.material, count]} frustumCulled={false}>
+    <instancedMesh ref={ref} args={[assets.geometry, assets.material, count]} frustumCulled={false} instanceMatrix-usage={DynamicDrawUsage}>
       <instancedBufferAttribute attach="geometry-attributes-aSpark" args={[spark, 1]} />
     </instancedMesh>
   );

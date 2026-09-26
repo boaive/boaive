@@ -5,6 +5,16 @@
  */
 export const debugLog: string[] = [];
 
+/** Live numbers from inside the stage (written by DebugProbe, read by DebugPanel). */
+export const stageStats = { dpr: 0, width: 0, height: 0, calls: 0, triangles: 0, frameMs: 0 };
+
+/**
+ * On-device test switches (DebugPanel's "Run test"): a fixed pixel ratio, or skip drawing
+ * altogether while everything else runs — separates GPU cost from script cost on the phone itself.
+ * While `active`, the adaptive resolution stands still.
+ */
+export const bench = { active: false, dpr: 0, skipRender: false };
+
 let installed = false;
 
 const describe = (value: unknown): string => {

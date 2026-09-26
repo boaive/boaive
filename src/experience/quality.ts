@@ -39,7 +39,9 @@ export function detectQuality(software: boolean): Quality {
 /** Per-tier budgets used by the scenes. */
 export const budgets = {
   high: {
+    /** Pixel-ratio range for AdaptiveResolution, and where it starts (never above the screen's own). */
     dpr: [1, 1.75] as [number, number],
+    dprStart: 1.75,
     antialias: true,
     oceanRings: 110,
     oceanSegments: 160,
@@ -53,6 +55,7 @@ export const budgets = {
   },
   medium: {
     dpr: [1, 1.4] as [number, number],
+    dprStart: 1.4,
     antialias: true,
     oceanRings: 84,
     oceanSegments: 128,
@@ -64,10 +67,12 @@ export const budgets = {
     grain: true,
     outlines: true,
   },
-  // Phones: fewer things drawn, but a sharp picture. Their 2–3× screens made 1.2× look jagged next to
-  // the ink outlines, and MSAA is cheap on mobile (tile-based) GPUs. AdaptiveResolution steps down if needed.
+  // Phones: fewer things drawn, antialiased (MSAA is cheap on tile-based GPUs). Starts in the middle of
+  // the range: fast phones climb to a sharp 1.75 within seconds, mid-range ones (e.g. Adreno 619) step
+  // down — below 1 if they must — instead of stuttering.
   low: {
-    dpr: [1, 1.75] as [number, number],
+    dpr: [0.8, 1.75] as [number, number],
+    dprStart: 1.35,
     antialias: true,
     oceanRings: 64,
     oceanSegments: 96,

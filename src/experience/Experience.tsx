@@ -74,7 +74,7 @@ export function Experience() {
     <>
       {mount ? (
         <StageBoundary>
-          <Stage />
+          <Stage debug={debug} />
         </StageBoundary>
       ) : null}
       {debug ? <DebugPanel /> : null}

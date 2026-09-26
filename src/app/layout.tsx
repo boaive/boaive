@@ -1,3 +1,7 @@
+// First, before any component: CSS order follows import order, and component modules override the
+// global type utilities (.t-display, .mono…) at equal specificity. Imported later, the production
+// build put globals after the modules and they won (dev didn't), so headings rendered at the wrong size.
+import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Archivo, IBM_Plex_Mono, Instrument_Serif } from "next/font/google";
 import { InlineScript } from "@/components/InlineScript";
@@ -5,7 +9,6 @@ import { RevealObserver } from "@/components/motion/RevealObserver";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SkipLink } from "@/components/layout/SkipLink";
 import { site } from "@/content/site";
-import "./globals.css";
 
 const archivo = Archivo({
   subsets: ["latin"],

@@ -51,7 +51,7 @@ function pool(n: number): Particle[] {
 export function WaterFX({ bubbleCount = 70, dropCount = 46 }: { bubbleCount?: number; dropCount?: number }) {
   const bubblesRef = useRef<InstancedMesh>(null);
   const dropsRef = useRef<InstancedMesh>(null);
-  const state = useMemo(() => ({ bubbles: pool(bubbleCount), drops: pool(dropCount), emit: 0, m: new Matrix4() }), [bubbleCount, dropCount]);
+  const state = useMemo(() => ({ bubbles: pool(bubbleCount), drops: pool(dropCount), emit: 0, m: new Matrix4(), resting: false }), [bubbleCount, dropCount]);
   const assets = useMemo(
     () => ({
       sphere: new SphereGeometry(1, 12, 10),
@@ -79,6 +79,22 @@ export function WaterFX({ bubbleCount = 70, dropCount = 46 }: { bubbleCount?: nu
   };
 
   useFrame(() => {
+    // Inside the laptop there's no sea to simulate: clear what's in flight once, then rest.
+    if (frame.world !== "ocean") {
+      oceanState.ripple.z += frame.dt; // the splash keeps fading, so it's gone when the sea comes back
+      if (state.resting) return;
+      state.resting = true;
+      for (const b of state.bubbles) b.on = false;
+      for (const d of state.drops) d.on = false;
+      for (const mesh of [bubblesRef.current, dropsRef.current]) {
+        if (mesh) {
+          mesh.count = 0;
+          mesh.visible = false;
+        }
+      }
+      return;
+    }
+    state.resting = false;
     const dt = frame.dt;
     const reduced = frame.motion === 0;
 
@@ -130,8 +146,10 @@ export function WaterFX({ bubbleCount = 70, dropCount = 46 }: { bubbleCount?: nu
         m.makeScale(s, s * 0.85, s).setPosition(b.p);
         bubbles.setMatrixAt(n++, m);
       }
+      // nothing alive: no upload, no draw call
       bubbles.count = n;
-      bubbles.instanceMatrix.needsUpdate = true;
+      bubbles.visible = n > 0;
+      if (n > 0) bubbles.instanceMatrix.needsUpdate = true;
     }
 
     const drops = dropsRef.current;
@@ -150,7 +168,8 @@ export function WaterFX({ bubbleCount = 70, dropCount = 46 }: { bubbleCount?: nu
         drops.setMatrixAt(n++, m);
       }
       drops.count = n;
-      drops.instanceMatrix.needsUpdate = true;
+      drops.visible = n > 0;
+      if (n > 0) drops.instanceMatrix.needsUpdate = true;
     }
   });
 

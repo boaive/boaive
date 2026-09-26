@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { story } from "@/story/store";
-import { debugLog } from "./debug";
+import { bench, debugLog, stageStats } from "./debug";
 
 /** What the GPU behind the stage can do (read from the live context when there is one). */
 function gpuReport(): string[] {
@@ -23,11 +23,61 @@ function gpuReport(): string[] {
   ];
 }
 
+const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/** Frames per second over `ms`, counted with requestAnimationFrame. */
+function measureFps(ms: number): Promise<number> {
+  return new Promise((resolve) => {
+    let frames = 0;
+    let first = 0;
+    const tick = (t: number) => {
+      if (!first) first = t;
+      else frames += 1;
+      if (t - first < ms) requestAnimationFrame(tick);
+      else resolve(Math.round((frames * 1000) / (t - first)));
+    };
+    requestAnimationFrame(tick);
+  });
+}
+
+/**
+ * The on-device test: the same spot measured as is, at lower pixel ratios, and with drawing skipped.
+ * If fewer pixels help, the GPU is filling pixels too slowly; if only "no drawing" helps, it's the
+ * number of things drawn; if nothing helps, it's scripts or the page itself.
+ */
+async function runTest(): Promise<string> {
+  const steps: { label: string; dpr: number; skip: boolean }[] = [
+    { label: "as is", dpr: 0, skip: false },
+    { label: "dpr 1", dpr: 1, skip: false },
+    { label: "dpr 0.5", dpr: 0.5, skip: false },
+    { label: "no drawing", dpr: 0, skip: true },
+  ];
+  const where = `${story.active} ${(story.progress[story.active] ?? 0).toFixed(2)}`;
+  const results: string[] = [];
+  bench.active = true;
+  try {
+    for (const step of steps) {
+      bench.dpr = step.dpr;
+      bench.skipRender = step.skip;
+      await wait(700);
+      const fps = await measureFps(2500);
+      results.push(`${step.label}${step.skip ? "" : ` (${stageStats.dpr.toFixed(2)}×)`}: ${fps} fps, js ${stageStats.frameMs.toFixed(1)} ms`);
+    }
+  } finally {
+    bench.active = false;
+    bench.dpr = 0;
+    bench.skipRender = false;
+  }
+  return `test at ${where}: ${results.join(" | ")}`;
+}
+
 /** A copyable diagnostics report, shown with `?debug` on the home page. */
 export default function DebugPanel() {
   const [report, setReport] = useState("");
   const [open, setOpen] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [testing, setTesting] = useState(false);
+  const tests = useRef<string[]>([]);
 
   useEffect(() => {
     let frames = 0;
@@ -46,13 +96,18 @@ export default function DebugPanel() {
     raf = requestAnimationFrame(tick);
 
     const update = () => {
+      const s = stageStats;
       const lines = [
         `Boaive debug · ${new Date().toISOString()}`,
         `url: ${location.href}`,
         `ua: ${navigator.userAgent}`,
         `screen: ${screen.width}×${screen.height} @${window.devicePixelRatio}x · viewport: ${innerWidth}×${innerHeight}`,
         `stage: ${story.stage} · quality: ${story.quality} · fps: ${fps} · reduced motion: ${story.reducedMotion}`,
+        s.width
+          ? `canvas: ${s.width}×${s.height} @ ${s.dpr.toFixed(2)}× · draw calls: ${s.calls} · triangles: ${s.triangles} · frame js: ${s.frameMs.toFixed(1)} ms`
+          : "canvas: (not drawing yet)",
         ...gpuReport(),
+        ...tests.current,
         `log (${debugLog.length}):`,
         ...(debugLog.length ? debugLog : ["(no errors)"]),
       ];
@@ -80,6 +135,16 @@ export default function DebugPanel() {
         window.getSelection()?.removeAllRanges();
         window.getSelection()?.addRange(range);
       }
+    }
+  };
+
+  const test = async () => {
+    if (testing || !stageStats.width) return;
+    setTesting(true);
+    try {
+      tests.current = [...tests.current, await runTest()].slice(-4);
+    } finally {
+      setTesting(false);
     }
   };
 
@@ -114,7 +179,10 @@ export default function DebugPanel() {
       }}
     >
       <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-        <strong style={{ font: "600 12px system-ui, sans-serif", flex: 1 }}>Debug report</strong>
+        <strong style={{ font: "600 12px system-ui, sans-serif", flex: 1 }}>{testing ? "Testing… keep still" : "Debug report"}</strong>
+        <button type="button" style={button} onClick={test} disabled={testing}>
+          {testing ? "…" : "Run test"}
+        </button>
         <button type="button" style={button} onClick={copy}>
           {copied ? "Copied" : "Copy report"}
         </button>

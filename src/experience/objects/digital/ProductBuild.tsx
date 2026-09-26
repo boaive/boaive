@@ -4,6 +4,7 @@ import { RoundedBox } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import {
+  DynamicDrawUsage,
   AdditiveBlending,
   BoxGeometry,
   BufferAttribute,
@@ -208,7 +209,8 @@ export function ProductBuild({ count }: { count: number }) {
       ring: new RingGeometry(0.98, 1, 96),
       ringMats: [0, 1, 2].map(
         () =>
-          new MeshBasicMaterial({ color: "#ff9a45", transparent: true, opacity: 0, side: DoubleSide, blending: AdditiveBlending, depthWrite: false, toneMapped: false }),
+          // additive and flat: order doesn't matter, so draw once
+          new MeshBasicMaterial({ color: "#ff9a45", transparent: true, opacity: 0, side: DoubleSide, forceSinglePass: true, blending: AdditiveBlending, depthWrite: false, toneMapped: false }),
       ),
       m: new Matrix4(),
       p: new Vector3(),
@@ -217,6 +219,8 @@ export function ProductBuild({ count }: { count: number }) {
       tmpQ: new Quaternion(),
       tmpV: new Vector3(),
       drift: new Vector3(),
+      /** Build stage the voxel matrices were last written for. */
+      lastStage: -1,
     };
   }, [voxels]);
 
@@ -229,8 +233,12 @@ export function ProductBuild({ count }: { count: number }) {
     const t = frame.elapsed;
     const mesh = voxelsRef.current;
 
-    // ── voxels ──
-    if (mesh) {
+    // ── voxels (once they've melted into the panels there's nothing left to move) ──
+    if (mesh) mesh.visible = clamp(S - 3) < 0.999;
+    // matrices only change while the chaos drifts (first step) or the stage moves: idle frames skip the upload
+    const drifting = clamp(S) < 1;
+    if (mesh?.visible && (drifting || S !== assets.lastStage)) {
+      assets.lastStage = S;
       const { m, p, q, s, tmpQ, tmpV, drift } = assets;
       const fU = clamp(S);
       const fD = clamp(S - 1);
@@ -264,7 +272,6 @@ export function ProductBuild({ count }: { count: number }) {
         mesh.setMatrixAt(i, m);
       });
       mesh.instanceMatrix.needsUpdate = true;
-      mesh.visible = fR < 0.999;
       assets.voxelMat.emissiveIntensity = 0.06 + 0.1 * (1 - fU);
     }
 
@@ -302,7 +309,7 @@ export function ProductBuild({ count }: { count: number }) {
 
   return (
     <group ref={group}>
-      <instancedMesh ref={voxelsRef} args={[assets.box, assets.voxelMat, voxels.length]}>
+      <instancedMesh ref={voxelsRef} args={[assets.box, assets.voxelMat, voxels.length]} instanceMatrix-usage={DynamicDrawUsage}>
         <instancedBufferAttribute attach="instanceColor" args={[assets.colors, 3]} />
       </instancedMesh>
       <lineSegments geometry={assets.blueprint} material={assets.blueprintMat} />

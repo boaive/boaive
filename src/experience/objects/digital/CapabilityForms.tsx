@@ -4,6 +4,7 @@ import { RoundedBox } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { type ReactNode, useMemo, useRef } from "react";
 import {
+  DynamicDrawUsage,
   BoxGeometry,
   BufferAttribute,
   BufferGeometry,
@@ -39,6 +40,9 @@ export const formsState = {
   /** 0..1 per form: the one the story is talking about. */
   activity: new Array<number>(FORM_COUNT).fill(0),
 };
+
+/** The ring is off stage: forms skip their per-frame work (instance matrices, colours) entirely. */
+const hidden = () => formsState.presence <= 0.002;
 
 const SILVER = new Color("#c8d5db");
 const EMBER = new Color("#ff8a2a");
@@ -78,6 +82,7 @@ function FormWeb({ index, m }: { index: number; m: Mats }) {
     };
   }, []);
   useFrame(() => {
+    if (hidden()) return;
     const a = formsState.activity[index];
     const t = frame.elapsed;
     const fan = 0.35 + 0.45 * easeInOutCubic(a);
@@ -135,6 +140,7 @@ function FormAI({ index, m }: { index: number; m: Mats }) {
     return { pts, lines, core, coreEdges: new EdgesGeometry(core), node: new SphereGeometry(0.045, 10, 8), m4: new Matrix4(), c: new Color() };
   }, []);
   useFrame((_, dt) => {
+    if (hidden()) return;
     const a = formsState.activity[index];
     if (group.current) group.current.rotation.y += dt * (0.08 + 0.25 * a) * frame.motion;
     const nodes = nodesRef.current;
@@ -153,7 +159,7 @@ function FormAI({ index, m }: { index: number; m: Mats }) {
   return (
     <group ref={group} position={[0, 0.4, 0]}>
       <lineSegments geometry={assets.lines} material={m.edge} />
-      <instancedMesh ref={nodesRef} args={[assets.node, m.node, assets.pts.length]} />
+      <instancedMesh ref={nodesRef} args={[assets.node, m.node, assets.pts.length]} instanceMatrix-usage={DynamicDrawUsage} />
       <mesh geometry={assets.core} material={m.accent} scale={0.9} />
       <lineSegments geometry={assets.coreEdges} material={m.edge} scale={1.35} />
     </group>
@@ -197,6 +203,7 @@ function FormSoftware({ index, m }: { index: number; m: Mats }) {
     };
   }, []);
   useFrame(() => {
+    if (hidden()) return;
     const a = formsState.activity[index];
     const t = frame.elapsed;
     assets.topMats.forEach((mat, i) => {
@@ -268,6 +275,7 @@ function FormAutomation({ index, m }: { index: number; m: Mats }) {
     };
   }, []);
   useFrame((_, dt) => {
+    if (hidden()) return;
     const a = formsState.activity[index];
     phase.current += dt * (0.03 + 0.12 * a) * frame.motion;
     const packets = packetsRef.current;
@@ -287,7 +295,7 @@ function FormAutomation({ index, m }: { index: number; m: Mats }) {
       {assets.gates.map((g, i) => (
         <mesh key={i} geometry={assets.gate} material={m.accent} position={g.p} quaternion={g.q} />
       ))}
-      <instancedMesh ref={packetsRef} args={[assets.packet, m.glass, assets.count]} />
+      <instancedMesh ref={packetsRef} args={[assets.packet, m.glass, assets.count]} instanceMatrix-usage={DynamicDrawUsage} />
     </group>
   );
 }
@@ -305,6 +313,7 @@ function FormMobile({ index, m }: { index: number; m: Mats }) {
     [],
   );
   useFrame(() => {
+    if (hidden()) return;
     const a = formsState.activity[index];
     const t = frame.elapsed;
     if (front.current) {
@@ -372,10 +381,12 @@ function FormCustom({ index, m }: { index: number; m: Mats }) {
       faceEdges: edgesOf(face),
       mobius,
       ribbonMat: new MeshStandardMaterial({ vertexColors: true, metalness: 0.75, roughness: 0.22, side: DoubleSide, emissive: EMBER, emissiveIntensity: 0.15 }),
-      faceMat: new MeshStandardMaterial({ color: "#0e1c25", metalness: 0.3, roughness: 0.25, transparent: true, opacity: 0.55, side: DoubleSide }),
+      // flat panels: one pass is enough (transparent + double-sided would be drawn twice, re-checking the shader each time)
+      faceMat: new MeshStandardMaterial({ color: "#0e1c25", metalness: 0.3, roughness: 0.25, transparent: true, opacity: 0.55, side: DoubleSide, forceSinglePass: true }),
     };
   }, []);
   useFrame((_, dt) => {
+    if (hidden()) return;
     const a = easeInOutCubic(clamp(formsState.activity[index]));
     walls.current.forEach((g) => {
       if (g) g.rotation.x = a * 1.25; // fold outward around the bottom edge
