@@ -29,7 +29,7 @@
   grid-area: 1 / 1;
 }
 
-.sampleDot {
+.labDot {
   color: var(--sea-200);
 }
 
@@ -135,10 +135,17 @@
   cursor: pointer;
 }
 
-/* Project index */
-.index ol {
+/* Project index, with the way out to the archive on the right */
+.index {
   display: flex;
+  align-items: stretch;
   border-top: 1px solid var(--line);
+}
+
+.index ol {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
 }
 
 .index li {
@@ -146,7 +153,7 @@
   min-width: 0;
 }
 
-.index li:nth-child(2) {
+.index li[data-group-start] {
   border-left: 1px solid var(--line);
   padding-left: var(--space-4);
 }
@@ -189,6 +196,146 @@
   font-size: var(--fs-micro);
 }
 
+.indexAll {
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  padding: 0.85rem 0 0.1rem var(--space-5);
+  margin-left: var(--space-4);
+  border-left: 1px solid var(--line);
+  font-size: var(--fs-small);
+  color: var(--fg);
+  transition: color var(--dur) var(--ease-out);
+}
+
+.indexAll :global(.mono) {
+  font-size: var(--fs-micro);
+  color: var(--fg-subtle);
+}
+
+.indexAll svg {
+  align-self: center;
+  color: var(--accent-soft);
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.indexAll:hover {
+  color: var(--ember-300);
+}
+
+.indexAll:hover svg {
+  transform: translateX(3px);
+}
+
+/* ── The way out: the full archive ─────────────────────────── */
+.more {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: var(--space-7);
+  min-height: 0;
+}
+
+.moreText {
+  max-width: 32rem;
+}
+
+.moreEyebrow {
+  color: var(--fg-muted);
+  margin-bottom: var(--space-4);
+}
+
+.moreHeading {
+  font-size: clamp(2.2rem, 1.3rem + 3vw, 4.4rem);
+}
+
+.moreBody {
+  margin-top: var(--space-4);
+  font-size: var(--fs-lede);
+  line-height: 1.45;
+  color: var(--bone-100);
+}
+
+/* The archive's two halves, as an index. */
+.moreGroups {
+  margin-top: var(--space-5);
+  border-top: 1px solid var(--line);
+}
+
+.moreGroups a {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--line);
+  transition: color var(--dur) var(--ease-out);
+}
+
+.moreGroups a > :global(.mono):first-child {
+  font-size: var(--fs-micro);
+  color: var(--accent-soft);
+}
+
+.moreGroupTitle {
+  flex: 1 1 auto;
+  font-size: var(--fs-h4);
+  font-weight: 480;
+  line-height: 1.2;
+  font-variation-settings: "wdth" 104;
+}
+
+.moreCount {
+  color: var(--fg-muted);
+}
+
+.moreGroups a:hover {
+  color: var(--ember-300);
+}
+
+.moreCta {
+  margin-top: var(--space-6);
+}
+
+/* Fallback wall of screens (only without the 3D stage). */
+.moreWall {
+  display: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  transform: perspective(1400px) rotateY(-9deg);
+}
+
+.moreWall img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 24px 60px -30px rgb(0 0 0 / 0.8);
+}
+
+:global(html:not([data-stage="ready"])) .moreWall {
+  display: grid;
+}
+
+/* Short desktop screens: keep the closing beat inside the stage. */
+@media (min-width: 901px) and (max-height: 820px) {
+  .moreBody {
+    font-size: 1.05rem;
+  }
+
+  .moreGroups a {
+    padding: 0.5rem 0;
+  }
+
+  .moreGroupTitle {
+    font-size: 1.15rem;
+  }
+
+  .moreCta {
+    margin-top: var(--space-5);
+  }
+}
+
 @media (max-width: 900px) {
   .project {
     grid-template-columns: 1fr;
@@ -228,5 +375,44 @@
 
   .index {
     display: none;
+  }
+
+  .more {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: var(--space-4);
+    align-items: end;
+    height: 100%;
+  }
+
+  .moreText {
+    grid-row: 2;
+  }
+
+  .moreWall {
+    grid-row: 1;
+    align-self: center;
+    transform: none;
+  }
+
+  .moreBody {
+    margin-top: var(--space-3);
+    font-size: 1rem;
+  }
+
+  .moreGroups {
+    margin-top: var(--space-4);
+  }
+
+  .moreGroups a {
+    padding: 0.55rem 0;
+  }
+
+  .moreGroupTitle {
+    font-size: 1.05rem;
+  }
+
+  .moreCta {
+    margin-top: var(--space-5);
   }
 }

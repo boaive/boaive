@@ -20,3 +20,31 @@
 .toggle :global(.mono) {
   font-size: var(--fs-micro);
 }
+
+/* Icon-only: a full touch target, as bright as the menu button beside it. */
+.icon {
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  color: var(--fg);
+}
+
+/* While sound plays, the waves breathe. */
+.toggle[aria-pressed="true"] [data-wave] {
+  animation: breathe 2.4s var(--ease-in-out) infinite;
+}
+
+.toggle[aria-pressed="true"] [data-wave="2"] {
+  animation-delay: 0.35s;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}

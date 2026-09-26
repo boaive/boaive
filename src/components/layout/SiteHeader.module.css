@@ -17,6 +17,22 @@
   pointer-events: auto;
 }
 
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgb(5 8 12 / 0.8);
+  backdrop-filter: blur(14px) saturate(1.15);
+  border-bottom: 1px solid var(--line);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease-out);
+}
+
+.header[data-solid]::before {
+  opacity: 1;
+}
+
 .brand {
   display: inline-flex;
   flex: none;
@@ -119,11 +135,18 @@
   padding: 0 var(--gutter) calc(var(--space-6) + env(safe-area-inset-bottom));
 }
 
+/* Mirrors the header bar, so the logo, sound and close/menu buttons don't move when it opens. */
 .menuBar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: var(--header-h);
+  padding-top: env(safe-area-inset-top);
+}
+
+.menuBarActions {
+  display: flex;
+  align-items: center;
 }
 
 .menuClose {
@@ -163,16 +186,30 @@
   justify-items: start;
 }
 
+/* Sound: labelled on wide screens; a speaker icon at the right edge once space gets tight. */
+.soundCompact {
+  display: none;
+}
+
 @media (max-width: 1180px) {
-  .sound :global(.mono) {
+  .sound {
     display: none;
+  }
+
+  .soundCompact {
+    display: flex;
+    margin-right: -0.6rem;
   }
 }
 
 @media (max-width: 960px) {
-  .nav,
-  .sound {
+  .nav {
     display: none;
+  }
+
+  /* Right against the menu button, exactly where it sits in the open menu's top bar. */
+  .soundCompact {
+    margin-right: calc(var(--space-4) * -1);
   }
 
   .menuButton {

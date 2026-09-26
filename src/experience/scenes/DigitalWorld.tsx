@@ -3,8 +3,9 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useMemo, useRef, useState } from "react";
 import { Color, type FogExp2, type Group, Vector3 } from "three";
-import { orderedProjects } from "@/data/projects";
-import { moments, timeAt } from "@/story/moments";
+import { featuredProjects } from "@/data/projects";
+import { handoffTimeAt, moments, timeAt } from "@/story/moments";
+import { timing } from "@/story/timing";
 import { story } from "@/story/store";
 import { ambient } from "../ambient";
 import { cameraRig } from "../camera/CameraRig";
@@ -70,9 +71,21 @@ export function DigitalWorld({ budget }: { budget: Budget }) {
     // screens power on as the first project arrives, after the chapter heading has had the stage
     galleryState.presence = presence(t, timeAt("work", 0.1), studioT + 0.35, 0.1);
     galleryState.video = !story.reducedMotion && story.quality !== "low";
-    const open = story.openProject ? orderedProjects.findIndex((p) => p.slug === story.openProject) : -1;
-    orderedProjects.forEach((_, i) => {
-      const target = open >= 0 ? (i === open ? 1 : 0.1) : t < timeAt("outcome", 0) ? projectActivity(i, t) : 0.35;
+    // closing beat: the screens gather into the archive wall, then return to the arc for the outcome
+    const [moreAt] = timing.work.more;
+    galleryState.gather =
+      smoothstep(timeAt("work", moreAt - 0.03), timeAt("work", moreAt + 0.05), t) *
+      (1 - smoothstep(handoffTimeAt("outcome", 0.05), handoffTimeAt("outcome", 0.7), t));
+    const open = story.openProject ? featuredProjects.findIndex((p) => p.slug === story.openProject) : -1;
+    featuredProjects.forEach((_, i) => {
+      const target =
+        open >= 0
+          ? i === open
+            ? 1
+            : 0.1
+          : t < timeAt("outcome", 0)
+            ? Math.max(projectActivity(i, t), galleryState.gather * 0.5)
+            : 0.35;
       galleryState.activity[i] = damp(galleryState.activity[i], target, 5, delta);
     });
 
@@ -84,8 +97,8 @@ export function DigitalWorld({ budget }: { budget: Budget }) {
     s.push = damp(s.push, open >= 0 ? 1 : 0, 3.5, delta);
     push.weight = s.push * 0.9;
     if (open >= 0) {
-      const a = GALLERY.angle(open, orderedProjects.length);
-      galleryPosition(open, orderedProjects.length, s.v);
+      const a = GALLERY.angle(open, featuredProjects.length);
+      galleryPosition(open, featuredProjects.length, s.v);
       push.look.copy(s.v).add(DIGITAL_ORIGIN);
       push.pos.set(s.v.x - Math.cos(a) * 4.6, s.v.y - 0.2, s.v.z - Math.sin(a) * 4.6).add(DIGITAL_ORIGIN);
       push.shift[0] = frame.portrait ? 0 : -0.34;

@@ -99,6 +99,23 @@ export function PhoneIcon(props: IconProps) {
 }
 
 /** Sound toggle glyph: waves when on, a flat line when off. */
+/** Speaker for the icon-only sound toggle: waves when on, a cross when muted. */
+export function SpeakerIcon({ on, ...props }: IconProps & { on: boolean }) {
+  return (
+    <Icon {...props}>
+      <path d="M4 9.5h3.2L12 5.5v13l-4.8-4H4z" />
+      {on ? (
+        <>
+          <path data-wave="1" d="M15.6 9.3a3.8 3.8 0 0 1 0 5.4" />
+          <path data-wave="2" d="M18.3 6.7a7.5 7.5 0 0 1 0 10.6" />
+        </>
+      ) : (
+        <path d="M16.2 9.8l4.4 4.4M20.6 9.8l-4.4 4.4" />
+      )}
+    </Icon>
+  );
+}
+
 export function SoundIcon({ on, ...props }: IconProps & { on: boolean }) {
   return (
     <Icon {...props}>

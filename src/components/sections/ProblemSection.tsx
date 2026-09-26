@@ -5,16 +5,20 @@ import { beat, timing } from "@/story/timing";
 import { Beats, Chapter, ChapterLabel } from "./Chapter";
 import styles from "./ProblemSection.module.css";
 
-/** Where each need floats: [left %, top %] on desktop and on phones. */
-const layout: { d: [number, number]; m: [number, number] }[] = [
-  { d: [6, 62], m: [4, 58] },
-  { d: [60, 74], m: [44, 70] },
-  { d: [30, 36], m: [22, 34] },
-  { d: [68, 22], m: [40, 20] },
-  { d: [42, 54], m: [8, 46] },
-  { d: [12, 20], m: [6, 26] },
-  { d: [78, 48], m: [36, 84] },
-  { d: [22, 84], m: [10, 76] },
+/**
+ * Where each need floats. Wide screens: a free field, `d` = [left %, top %].
+ * Compact screens stack them one per row, shifted across by `f` (0 = left edge, 1 = right edge),
+ * so nothing can overlap or run off the screen.
+ */
+const layout: { d: [number, number]; f: number }[] = [
+  { d: [6, 62], f: 0.04 },
+  { d: [60, 74], f: 0.68 },
+  { d: [30, 36], f: 0.22 },
+  { d: [68, 22], f: 0.96 },
+  { d: [42, 54], f: 0.08 },
+  { d: [12, 20], f: 0.8 },
+  { d: [78, 48], f: 0.44 },
+  { d: [22, 84], f: 0.1 },
 ];
 
 /** 03 — The problem. Boaive starts with the client's problem, not a technology. */
@@ -33,7 +37,7 @@ export function ProblemSection() {
           ))}
         </h2>
 
-        <div className={styles.needs} data-beat={beat(t.needs)} data-dy="0">
+        <div className={styles.needs} data-beat={beat(t.needs)} data-dy="0" data-progress="">
           <p className={`${styles.needsLabel} mono`}>{problemCopy.needsLabel}</p>
           <ul role="list" className={styles.needList}>
             {needs.map((need, i) => (
@@ -41,18 +45,22 @@ export function ProblemSection() {
                 key={need.text}
                 className={styles.need}
                 data-rise={(0.08 + need.depth * 0.16).toFixed(3)}
+                data-rise-compact="0.04"
                 style={
                   {
                     "--x": `${layout[i].d[0]}%`,
                     "--y": `${layout[i].d[1]}%`,
-                    "--mx": `${layout[i].m[0]}%`,
-                    "--my": `${layout[i].m[1]}%`,
+                    "--f": layout[i].f,
+                    // compact screens: surfaces one after another, like messages arriving
+                    "--in": (t.needs[0] + 0.01 + i * 0.028).toFixed(3),
                     "--depth": need.depth,
                   } as CSSProperties
                 }
               >
-                <span className={styles.bubble} aria-hidden="true" />
-                {need.text}
+                <span className={styles.chip}>
+                  <span className={styles.bubble} aria-hidden="true" />
+                  {need.text}
+                </span>
               </li>
             ))}
           </ul>

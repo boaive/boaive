@@ -21,6 +21,25 @@ export function SiteHeader() {
   const active = useStory("active");
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDialogElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
+
+  // Flowing pages scroll content under the header: give it a backing once scrolled.
+  // (The home story keeps it clear — its stages are laid out around it.)
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    if (onHome) {
+      delete header.dataset.solid;
+      return;
+    }
+    const onScroll = () => {
+      if (window.scrollY > 12) header.dataset.solid = "";
+      else delete header.dataset.solid;
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [onHome]);
 
   useEffect(() => {
     const menu = menuRef.current;
@@ -30,7 +49,7 @@ export function SiteHeader() {
   }, [menuOpen]);
 
   return (
-    <header className={styles.header}>
+    <header ref={headerRef} className={styles.header}>
       <Link
         href="/"
         className={styles.brand}
@@ -47,10 +66,12 @@ export function SiteHeader() {
       <nav aria-label="Primary" className={styles.nav}>
         <ul role="list">
           {primaryNav.map((item) => {
-            const current = onHome && active === item.chapter;
+            const current = onHome
+              ? active === item.chapter
+              : !!item.page && (pathname === item.page || pathname.startsWith(`${item.page}/`));
             return (
               <li key={item.chapter}>
-                <ChapterLink chapter={item.chapter} className={styles.navLink} current={current}>
+                <ChapterLink chapter={item.chapter} page={item.page} className={styles.navLink} current={current}>
                   {item.label}
                 </ChapterLink>
               </li>
@@ -66,6 +87,10 @@ export function SiteHeader() {
         <Button href={whatsappHref(introMessage())} external size="sm" icon={<ArrowUpRight size={15} />} className={styles.cta}>
           Let&apos;s build
         </Button>
+        {/* Compact screens: an icon beside the menu button, in the same spot as in the open menu. */}
+        <span className={styles.soundCompact}>
+          <SoundToggle variant="icon" />
+        </span>
         <button
           type="button"
           className={styles.menuButton}
@@ -82,16 +107,24 @@ export function SiteHeader() {
         <div className={styles.menuInner}>
           <div className={styles.menuBar}>
             <Logo />
-            <button type="button" className={styles.menuClose} onClick={() => setMenuOpen(false)}>
-              <CloseIcon size={22} />
-              <span className="sr-only">Close menu</span>
-            </button>
+            <div className={styles.menuBarActions}>
+              <SoundToggle variant="icon" />
+              <button type="button" className={styles.menuClose} onClick={() => setMenuOpen(false)}>
+                <CloseIcon size={22} />
+                <span className="sr-only">Close menu</span>
+              </button>
+            </div>
           </div>
           <nav aria-label="Menu">
             <ol role="list" className={styles.menuNav}>
               {primaryNav.map((item, i) => (
                 <li key={item.chapter}>
-                  <ChapterLink chapter={item.chapter} className={styles.menuLink} onNavigate={() => setMenuOpen(false)}>
+                  <ChapterLink
+                    chapter={item.chapter}
+                    page={item.page}
+                    className={styles.menuLink}
+                    onNavigate={() => setMenuOpen(false)}
+                  >
                     <span className="mono">{String(i + 1).padStart(2, "0")}</span>
                     {item.label}
                   </ChapterLink>
@@ -104,7 +137,6 @@ export function SiteHeader() {
               Let&apos;s build on WhatsApp
             </Button>
             <ContactLinks whatsapp={false} layout="column" />
-            <SoundToggle />
           </div>
         </div>
       </dialog>

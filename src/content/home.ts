@@ -52,15 +52,51 @@ export const processCopy = {
 
 export const workCopy = {
   heading: "Things we've built.",
-  intro: "Real sites, live today. Client work first — then samples we built to show how we'd approach a type of business.",
+  intro:
+    "Real sites, live today. Client work first — then experiments: builds we made ourselves to explore how we'd approach a type of business.",
   clientLabel: "Client work",
-  samplesLabel: "Samples",
-  samplesNote:
+  labLabel: "Experiments & prototypes",
+  labNote:
     "Self-initiated builds, not client projects. The businesses, people, reviews and numbers inside them are illustrative.",
-  sampleNotice: "Self-initiated — not a client project.",
+  labNotice: "Self-initiated — not a client project.",
   openCaseStudy: "View case study",
   visitSite: "Visit live site",
   similar: "Start something similar",
+  allWork: "All work",
+  /** The chapter's closing beat: the way into the full archive. */
+  more: {
+    eyebrow: "The archive",
+    heading: "Everything we've built.",
+    body: "Client work first, then the experiments and prototypes where we try ideas out — each with its own case study.",
+    cta: "View all work",
+  },
+} as const;
+
+/** The /work archive page. */
+export const archiveCopy = {
+  title: "All work",
+  description:
+    "Every Boaive project in one place: client work for real businesses, plus the experiments and prototypes where we try ideas out.",
+  heading: "Everything we've built.",
+  lede: "Client work for real businesses — and the experiments and prototypes where we try ideas out on our own. Every project comes with a case study.",
+  groups: {
+    client: {
+      title: "Client work",
+      intro: "Paid work for real businesses: what they needed, what we built, and where it runs today.",
+    },
+    lab: {
+      title: "Experiments & prototypes",
+      intro:
+        "Self-initiated builds. We make these to explore how we'd approach a type of business, or to try an idea before it goes into client work.",
+      note: "Not client projects — the businesses, people, reviews and numbers inside them are illustrative.",
+    },
+  },
+  caseStudy: "Case study",
+  liveSite: "Live site",
+  cta: {
+    heading: "Have something like this in mind?",
+    body: "Tell us about it. A short message is enough — we'll reply with questions, not a sales pitch.",
+  },
 } as const;
 
 export const outcomeCopy = {

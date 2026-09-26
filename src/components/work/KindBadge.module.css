@@ -28,13 +28,23 @@
   background: var(--ember-500);
 }
 
-.badge[data-kind="sample"],
-.badge[data-kind="experiment"] {
+/* Self-initiated work: open outlines, never the solid ember of client work. */
+.badge[data-kind="experiment"],
+.badge[data-kind="prototype"] {
   border: 1px dashed color-mix(in srgb, var(--sea-200) 55%, transparent);
   color: var(--sea-200);
 }
 
-.badge[data-kind="sample"] .dot,
+.badge[data-kind="prototype"] {
+  border-style: dotted;
+}
+
 .badge[data-kind="experiment"] .dot {
   border: 1px solid var(--sea-200);
+}
+
+.badge[data-kind="prototype"] .dot {
+  border: 1px solid var(--sea-200);
+  border-radius: 1px;
+  transform: rotate(45deg) scale(0.85);
 }

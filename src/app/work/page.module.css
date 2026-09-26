@@ -1,0 +1,398 @@
+/*
+ * /work — the archive. It lives below the story's work chapter: the same deep water,
+ * the same grid floor and mono annotations, with the depth gauge sinking as you scroll.
+ */
+.page {
+  position: relative;
+  /* own stacking context, so the fixed water paints above the body background */
+  isolation: isolate;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter) var(--space-9);
+}
+
+/* The water column: lighter near the surface, ink in the depths. */
+.water {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(90% 55% at 50% -12%, rgb(52 112 130 / 0.32), transparent 70%),
+    linear-gradient(to bottom, #0b1b25 0%, #07121a 45%, var(--ink-950) 100%);
+  pointer-events: none;
+}
+
+/* ── Hero ─────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  display: grid;
+  align-content: end;
+  min-height: min(92svh, 60rem);
+  padding: calc(var(--header-h) + var(--space-8)) 0 var(--space-8);
+}
+
+/* Full-bleed atmosphere behind the hero: light from above, the grid floor below. */
+.heroDeep {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  overflow: hidden;
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, black 88%, transparent);
+}
+
+.shafts {
+  position: absolute;
+  inset: -10% -20% 25%;
+  background: repeating-linear-gradient(
+    104deg,
+    transparent 0 7%,
+    rgb(159 186 198 / 0.07) 7% 9%,
+    transparent 9% 17%,
+    rgb(159 186 198 / 0.04) 17% 18%,
+    transparent 18% 26%
+  );
+  mask-image: radial-gradient(75% 90% at 50% 0%, black, transparent 75%);
+  filter: blur(8px);
+  animation: sway 16s var(--ease-in-out) infinite alternate;
+}
+
+@keyframes sway {
+  from {
+    transform: translateX(-2%) skewX(-2deg);
+  }
+  to {
+    transform: translateX(2%) skewX(2deg);
+  }
+}
+
+/* The grid floor of the digital deep, receding into the fog. */
+.floor {
+  position: absolute;
+  left: -40%;
+  right: -40%;
+  bottom: 0;
+  height: 52%;
+  background-image:
+    linear-gradient(rgb(159 186 198 / 0.17) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(159 186 198 / 0.17) 1px, transparent 1px);
+  background-size: 72px 72px;
+  transform: perspective(520px) rotateX(66deg);
+  transform-origin: 50% 100%;
+  mask-image: linear-gradient(to top, transparent 0%, black 22%, black 40%, transparent 92%);
+  animation: approach 9s linear infinite;
+}
+
+/* A faint ember horizon where the floor meets the fog. */
+.floor::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  top: 8%;
+  height: 30%;
+  background: radial-gradient(50% 50% at 50% 50%, rgb(255 138 42 / 0.14), transparent 70%);
+}
+
+@keyframes approach {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 72px;
+  }
+}
+
+.speck {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: var(--bone-100);
+  opacity: var(--o);
+  animation: drift var(--dur) linear var(--delay) infinite;
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(0, 12vh, 0);
+    opacity: 0;
+  }
+  20% {
+    opacity: var(--o);
+  }
+  80% {
+    opacity: var(--o);
+  }
+  to {
+    transform: translate3d(1.5vw, -18vh, 0);
+    opacity: 0;
+  }
+}
+
+.crumbs {
+  position: absolute;
+  top: calc(var(--header-h) + var(--space-5));
+  left: 0;
+  font-size: var(--fs-micro);
+  color: var(--fg-muted);
+}
+
+.crumbs a {
+  transition: color var(--dur) var(--ease-out);
+}
+
+.crumbs a:hover {
+  color: var(--fg);
+}
+
+.eyebrow {
+  color: var(--fg-muted);
+  animation: rise 0.9s var(--ease-out) 0.05s both;
+}
+
+.title {
+  margin-top: var(--space-5);
+  max-width: 11ch;
+  font-size: clamp(3.2rem, 1.2rem + 7.4vw, 9.5rem);
+  font-weight: 460;
+  line-height: 0.92;
+  letter-spacing: var(--tracking-display);
+  font-variation-settings: "wdth" var(--wdth-display);
+  animation: rise 1s var(--ease-out) 0.12s both;
+}
+
+.title:focus {
+  outline: none;
+}
+
+.lede {
+  margin-top: var(--space-6);
+  max-width: 36rem;
+  color: var(--bone-100);
+  animation: rise 1s var(--ease-out) 0.24s both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The archive's index: jump to either half. */
+.jump {
+  margin-top: var(--space-8);
+  animation: rise 1s var(--ease-out) 0.36s both;
+}
+
+.jump ol {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  border-top: 1px solid var(--line-strong);
+}
+
+.jump a {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5) var(--space-4) 0;
+  border-bottom: 1px solid var(--line);
+  transition: color var(--dur) var(--ease-out);
+}
+
+.jump li + li a {
+  padding-left: var(--space-5);
+  border-left: 1px solid var(--line);
+}
+
+.jumpNumber {
+  font-size: var(--fs-micro);
+  color: var(--accent-soft);
+}
+
+.jumpTitle {
+  flex: 1 1 auto;
+  font-size: var(--fs-h4);
+  font-weight: 480;
+  font-variation-settings: "wdth" 104;
+}
+
+.jumpCount {
+  color: var(--fg-muted);
+}
+
+.jump a:hover {
+  color: var(--ember-300);
+}
+
+/* ── Groups ───────────────────────────────────────────────── */
+.group {
+  display: grid;
+  gap: var(--space-8);
+  padding-top: var(--space-9);
+  scroll-margin-top: var(--header-h);
+}
+
+.groupHead {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  column-gap: var(--space-7);
+  row-gap: var(--space-5);
+  align-items: end;
+}
+
+.groupLabel {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 0.9em;
+  color: var(--fg-muted);
+}
+
+.groupNumber {
+  color: var(--accent-soft);
+}
+
+.groupRule {
+  flex: 1 1 auto;
+  height: 1px;
+  background: linear-gradient(to right, var(--line-strong), var(--line) 70%);
+}
+
+.groupTitle {
+  font-size: var(--fs-h1);
+  font-weight: 460;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+  font-variation-settings: "wdth" var(--wdth-display);
+}
+
+.groupTitle:focus {
+  outline: none;
+}
+
+.groupIntro {
+  display: grid;
+  gap: var(--space-4);
+  padding-bottom: 0.4rem;
+}
+
+.groupIntro > p:first-child {
+  color: var(--bone-100);
+}
+
+.note {
+  padding-left: var(--space-3);
+  border-left: 1px dashed var(--sea-400);
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+
+.features {
+  display: grid;
+  gap: var(--space-9);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-8) var(--space-6);
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-7) var(--space-5);
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.group[data-group="client"] .grid {
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--line);
+}
+
+/* ── Closing call to action ───────────────────────────────── */
+.cta {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: var(--space-6) var(--space-7);
+  align-items: end;
+  margin-top: var(--space-10);
+  padding-top: var(--space-7);
+  border-top: 1px solid var(--line-strong);
+  scroll-margin-top: var(--header-h);
+}
+
+.ctaEyebrow {
+  color: var(--fg-muted);
+  margin-bottom: var(--space-4);
+}
+
+.ctaTitle {
+  max-width: 14ch;
+}
+
+.ctaTitle:focus {
+  outline: none;
+}
+
+.ctaSide {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-5);
+}
+
+.ctaLinks {
+  color: var(--fg-muted);
+}
+
+@media (max-width: 900px) {
+  .groupHead,
+  .cta {
+    grid-template-columns: 1fr;
+  }
+
+  .features {
+    gap: var(--space-8);
+  }
+}
+
+@media (max-width: 720px) {
+  .hero {
+    min-height: 88svh;
+    padding-bottom: var(--space-7);
+  }
+
+  .jump li + li a {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .group {
+    gap: var(--space-7);
+    padding-top: var(--space-8);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shafts,
+  .floor,
+  .speck {
+    animation: none;
+  }
+}

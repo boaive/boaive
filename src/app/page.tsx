@@ -2,6 +2,7 @@ import { Backdrop } from "@/components/layout/Backdrop";
 import { DepthGauge } from "@/components/layout/DepthGauge";
 import { JumpVeil } from "@/components/layout/JumpVeil";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { StageLoader } from "@/components/layout/StageLoader";
 import { ScrollDirector } from "@/components/motion/ScrollDirector";
 import { CapabilitiesSection } from "@/components/sections/CapabilitiesSection";
 import { ContactSection } from "@/components/sections/ContactSection";
@@ -25,6 +26,7 @@ export default function HomePage() {
     <>
       <Backdrop />
       <Experience />
+      <StageLoader />
       <JumpVeil />
       <DepthGauge />
 

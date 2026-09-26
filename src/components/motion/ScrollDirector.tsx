@@ -11,6 +11,9 @@ import { jumpToHashOnLoad, registerLenis, scrollToY } from "@/lib/navigation";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/** Compact layouts (tablets, phones) — keep in sync with the CSS that stacks content at this width. */
+const COMPACT = "(max-width: 1200px)";
+
 /**
  * Owns scrolling for the home page story.
  *
@@ -19,6 +22,7 @@ gsap.registerPlugin(ScrollTrigger);
  * 3. Declarative choreography inside each chapter's pinned stage:
  *      data-beat="in,out"     fade/rise in at `in`, out at `out` (fractions of the pinned range)
  *      data-rise="speed"      drift upward through the range (parallax), speed in viewport heights
+ *      data-rise-compact      the speed to use on compact screens instead (e.g. a uniform drift)
  *      data-progress          receives --p (0..1) for CSS-driven effects
  *      data-steps             children with data-step="in,out" get aria-current while active
  */
@@ -125,10 +129,14 @@ function choreograph(section: HTMLElement, reduced: boolean): (() => void) | und
     }
   }
 
+  const compact = window.matchMedia(COMPACT);
   for (const el of risers) {
-    const speed = Number(el.dataset.rise);
     if (reduced) continue;
-    tl.fromTo(el, { y: () => speed * window.innerHeight }, { y: () => -speed * window.innerHeight, duration: 1 }, 0);
+    const wide = Number(el.dataset.rise);
+    const narrow = el.dataset.riseCompact !== undefined ? Number(el.dataset.riseCompact) : wide;
+    // functions are re-evaluated on every refresh, so crossing the breakpoint (resize, rotation) re-picks
+    const speed = () => (compact.matches ? narrow : wide);
+    tl.fromTo(el, { y: () => speed() * window.innerHeight }, { y: () => -speed() * window.innerHeight, duration: 1 }, 0);
   }
 
   // Invisible beats must not catch clicks.

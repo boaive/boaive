@@ -1,0 +1,59 @@
+/* Text sits in the water below the horizon (36%), where the story's hero sits. */
+.page {
+  position: relative;
+  z-index: var(--z-content);
+  min-height: 100svh;
+  display: grid;
+  align-content: end;
+  justify-items: start;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: calc(36svh + var(--space-7)) var(--gutter) var(--space-8);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8em;
+  color: var(--fg-muted);
+}
+
+.rule {
+  width: 2.5rem;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.title {
+  margin-top: var(--space-5);
+  max-width: 12ch;
+}
+
+.lede {
+  margin-top: var(--space-5);
+  max-width: 32rem;
+  color: var(--bone-100);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-7);
+}
+
+.help {
+  margin-top: var(--space-6);
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+
+.help a {
+  color: var(--fg);
+  border-bottom: 1px solid var(--line-strong);
+  transition: border-color var(--dur) var(--ease-out);
+}
+
+.help a:hover {
+  border-color: var(--accent-soft);
+}

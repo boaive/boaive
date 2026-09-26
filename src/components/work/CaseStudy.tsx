@@ -58,7 +58,7 @@ export function CaseStudy({ project, headingLevel = 2, headingId }: Props) {
         </div>
         {project.disclaimer ? (
           <p className={styles.disclaimer} role="note">
-            {workCopy.sampleNotice} {project.disclaimer}
+            {workCopy.labNotice} {project.disclaimer}
           </p>
         ) : null}
       </header>

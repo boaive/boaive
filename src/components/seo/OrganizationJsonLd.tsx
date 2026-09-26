@@ -13,7 +13,7 @@ export function OrganizationJsonLd() {
     description: site.seo.description,
     url: site.url,
     logo: `${site.url}/brand/icon-512.png`,
-    image: `${site.url}/opengraph-image.png`,
+    image: `${site.url}/opengraph-image.jpg`,
     email: site.contact.email,
     telephone: site.contact.phone.display.replace(/\s/g, ""),
     sameAs: [site.contact.instagram.url],

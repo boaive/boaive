@@ -1,3 +1,8 @@
+import { featuredProjects } from "@/data/projects";
+
+/** Work gives every featured project the same scroll, however many there are. */
+const featured = featuredProjects.length;
+
 /**
  * The story, in order. This list is shared by the DOM (sections, nav, depth gauge)
  * and the 3D stage (camera track, scene visibility).
@@ -12,7 +17,7 @@ export const chapters = [
   { id: "problem", title: "The problem", depth: 40, world: "digital", length: { desktop: 3.0, mobile: 2.7 } },
   { id: "capabilities", title: "What we build", depth: 70, world: "digital", length: { desktop: 5.4, mobile: 4.8 } },
   { id: "process", title: "How we build", depth: 110, world: "digital", length: { desktop: 4.8, mobile: 4.2 } },
-  { id: "work", title: "Work", depth: 140, world: "digital", length: { desktop: 5.2, mobile: 4.6 } },
+  { id: "work", title: "Work", depth: 140, world: "digital", length: { desktop: 1.8 + featured * 0.95, mobile: 1.6 + featured * 0.85 } },
   { id: "outcome", title: "Outcome", depth: 120, world: "digital", length: { desktop: 2.6, mobile: 2.3 } },
   { id: "studio", title: "Studio", depth: 80, world: "digital", length: { desktop: 2.2, mobile: 2.0 } },
   { id: "contact", title: "Surface", depth: 12, world: "ocean", length: { desktop: 2.6, mobile: 2.3 } },

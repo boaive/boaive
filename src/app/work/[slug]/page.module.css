@@ -1,5 +1,7 @@
 .page {
   position: relative;
+  /* own stacking context, so the fixed backdrop paints above the body background */
+  isolation: isolate;
   max-width: 64rem;
   margin: 0 auto;
   padding: calc(var(--header-h) + var(--space-7)) var(--gutter) var(--space-9);

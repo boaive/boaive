@@ -16,14 +16,16 @@ import {
   type Texture,
   VideoTexture,
 } from "three";
-import { orderedProjects } from "@/data/projects";
-import { GALLERY, galleryPosition } from "../../choreo/digitalLayout";
-import { damp } from "../../math";
+import { featuredProjects } from "@/data/projects";
+import { GALLERY, galleryPosition, galleryRotation, WALL, wallPosition } from "../../choreo/digitalLayout";
+import { clamp, damp, easeInOutCubic, lerp } from "../../math";
 
 /** Written by the digital world controller. */
 export const galleryState = {
   presence: 0,
-  activity: orderedProjects.map(() => 0),
+  activity: featuredProjects.map(() => 0),
+  /** 0 = screens on the arc, 1 = gathered into the archive wall. */
+  gather: 0,
   /** Allow scroll-through videos (off on low tier / reduced motion). */
   video: true,
 };
@@ -45,7 +47,7 @@ void main() {
 
 /** One project's screen: frame, picture (poster → live video when active), and its own light. */
 function ProjectScreen({ index, poster }: { index: number; poster: Texture }) {
-  const project = orderedProjects[index];
+  const project = featuredProjects[index];
   const screenRef = useRef<Mesh>(null);
   const video = useRef<HTMLVideoElement | null>(null);
   const videoTex = useRef<VideoTexture | null>(null);
@@ -122,26 +124,57 @@ function ProjectScreen({ index, poster }: { index: number; poster: Texture }) {
   );
 }
 
-/** The archive: every project on a screen in the deep, arranged on an arc above the ring. */
+/** Shortest signed angle from a to b. */
+const angleDelta = (a: number, b: number) => Math.atan2(Math.sin(b - a), Math.cos(b - a));
+
+/**
+ * The featured projects, each on a screen in the deep, arranged on an arc above the ring.
+ * At the end of the chapter they gather into one wall — the way into the full archive.
+ */
 export function WorkGallery() {
   const group = useRef<Group>(null);
-  const posters = useTexture(orderedProjects.map((p) => p.media.poster.src));
-  const placements = useMemo(
-    () =>
-      orderedProjects.map((_, i) => {
-        const pos = galleryPosition(i, orderedProjects.length);
-        const a = GALLERY.angle(i, orderedProjects.length);
-        return { pos, rotY: Math.atan2(-Math.cos(a), -Math.sin(a)) };
-      }),
-    [],
-  );
+  const holders = useRef<(Group | null)[]>([]);
+  const lastGather = useRef(-1);
+  const posters = useTexture(featuredProjects.map((p) => p.media.poster.src));
+  const placements = useMemo(() => {
+    const n = featuredProjects.length;
+    return featuredProjects.map((_, i) => ({
+      arc: galleryPosition(i, n),
+      arcRot: galleryRotation(i, n),
+      wall: wallPosition(i, n),
+    }));
+  }, []);
+
   useFrame(() => {
     if (group.current) group.current.visible = galleryState.presence > 0.002;
+    const g = galleryState.gather;
+    if (g === lastGather.current) return;
+    lastGather.current = g;
+    const n = placements.length;
+    placements.forEach((pl, i) => {
+      const holder = holders.current[i];
+      if (!holder) return;
+      // staggered: the first screens leave slightly earlier
+      const lag = n > 1 ? (i / (n - 1)) * 0.3 : 0;
+      const e = easeInOutCubic(clamp(g * 1.3 - lag));
+      holder.position.lerpVectors(pl.arc, pl.wall, e);
+      holder.position.y += Math.sin(Math.PI * e) * 0.9;
+      holder.rotation.y = pl.arcRot + angleDelta(pl.arcRot, WALL.rotation) * e;
+      holder.scale.setScalar(lerp(1, WALL.scale, e));
+    });
   });
+
   return (
     <group ref={group}>
       {placements.map((pl, i) => (
-        <group key={orderedProjects[i].slug} position={pl.pos} rotation={[0, pl.rotY, 0]}>
+        <group
+          key={featuredProjects[i].slug}
+          ref={(el) => {
+            holders.current[i] = el;
+          }}
+          position={pl.arc}
+          rotation={[0, pl.arcRot, 0]}
+        >
           <ProjectScreen index={i} poster={posters[i]} />
         </group>
       ))}

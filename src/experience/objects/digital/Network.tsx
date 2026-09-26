@@ -3,7 +3,7 @@
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import { AdditiveBlending, Color, type Group, QuadraticBezierCurve3, ShaderMaterial, TubeGeometry, Vector3 } from "three";
-import { orderedProjects } from "@/data/projects";
+import { featuredProjects } from "@/data/projects";
 import { FORM_COUNT, formPosition, galleryPosition, PRODUCT_POSITION } from "../../choreo/digitalLayout";
 import { frame } from "../../frame";
 
@@ -53,8 +53,8 @@ export function Network() {
       out.push({ from: centre, to: formPosition(i).add(new Vector3(0, -0.6, 0)), lift: 1.6, delay: i * 0.05, weight: 1 });
       out.push({ from: formPosition(i).add(new Vector3(0, -0.9, 0)), to: formPosition((i + 1) % FORM_COUNT).add(new Vector3(0, -0.9, 0)), lift: -0.6, delay: 0.3 + i * 0.04, weight: 0.7 });
     }
-    orderedProjects.forEach((_, i) => {
-      const g = galleryPosition(i, orderedProjects.length);
+    featuredProjects.forEach((_, i) => {
+      const g = galleryPosition(i, featuredProjects.length);
       out.push({ from: PRODUCT_POSITION.clone().add(new Vector3(0, 1.6, 0)), to: g.clone().add(new Vector3(0, -1.7, 0)), lift: 2.5, delay: 0.5 + i * 0.05, weight: 0.8 });
     });
     return out;

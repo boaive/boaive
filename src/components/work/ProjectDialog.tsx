@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { getProject, orderedProjects } from "@/data/projects";
+import { featuredProjects, getProject } from "@/data/projects";
 import { getLenis } from "@/lib/navigation";
 import { setStory, useStory } from "@/story/store";
 import { ArrowRight, CloseIcon } from "@/components/ui/icons";
@@ -44,11 +44,17 @@ export function ProjectDialog() {
       setStory({ openProject: null, focusedProject: null });
     };
     dialog.addEventListener("close", onClose);
-    return () => dialog.removeEventListener("close", onClose);
+    return () => {
+      dialog.removeEventListener("close", onClose);
+      // Leaving the page (e.g. "Open as page") unmounts the dialog without a close event.
+      document.documentElement.classList.remove("dialog-open");
+      setStory({ openProject: null, focusedProject: null });
+    };
   }, []);
 
-  const index = project ? orderedProjects.findIndex((p) => p.slug === project.slug) : -1;
-  const next = index >= 0 ? orderedProjects[(index + 1) % orderedProjects.length] : null;
+  // The dialog follows the screens in the story; the full list lives on /work.
+  const index = project ? featuredProjects.findIndex((p) => p.slug === project.slug) : -1;
+  const next = index >= 0 ? featuredProjects[(index + 1) % featuredProjects.length] : null;
 
   return (
     <dialog
@@ -64,6 +70,9 @@ export function ProjectDialog() {
           <div className={styles.bar}>
             <p className="mono">Case study · {String(index + 1).padStart(2, "0")}</p>
             <div className={styles.barActions}>
+              <Link href="/work" className={`${styles.pageLink} mono`}>
+                All work
+              </Link>
               <Link href={`/work/${project.slug}`} className={`${styles.pageLink} mono`}>
                 Open as page
               </Link>

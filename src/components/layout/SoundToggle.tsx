@@ -1,12 +1,19 @@
 "use client";
 
 import { setStory, useStory } from "@/story/store";
-import { SoundIcon } from "@/components/ui/icons";
+import { SoundIcon, SpeakerIcon } from "@/components/ui/icons";
 import styles from "./SoundToggle.module.css";
 
+type Props = {
+  /** "label": waveform + "Sound on/off" (wide header). "icon": a 44px speaker button (compact header, menu). */
+  variant?: "label" | "icon";
+};
+
 /** Sound is always opt-in. The synth engine is only downloaded on first use. */
-export function SoundToggle({ showLabel = true }: { showLabel?: boolean }) {
+export function SoundToggle({ variant = "label" }: Props) {
   const on = useStory("sound");
+  const iconOnly = variant === "icon";
+  const label = on ? "Sound on" : "Sound off";
 
   const toggle = async () => {
     const { audio } = await import("@/lib/audio/engine");
@@ -20,9 +27,15 @@ export function SoundToggle({ showLabel = true }: { showLabel?: boolean }) {
   };
 
   return (
-    <button type="button" className={styles.toggle} aria-pressed={on} onClick={toggle}>
-      <SoundIcon on={on} size={18} />
-      <span className={showLabel ? "mono" : "sr-only"}>{on ? "Sound on" : "Sound off"}</span>
+    <button
+      type="button"
+      className={iconOnly ? `${styles.toggle} ${styles.icon}` : styles.toggle}
+      aria-pressed={on}
+      title={iconOnly ? label : undefined}
+      onClick={toggle}
+    >
+      {iconOnly ? <SpeakerIcon on={on} size={21} /> : <SoundIcon on={on} size={18} />}
+      <span className={iconOnly ? "sr-only" : "mono"}>{label}</span>
     </button>
   );
 }

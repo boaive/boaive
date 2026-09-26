@@ -57,11 +57,16 @@ export const site = {
   },
 } as const;
 
-export type NavItem = { label: string; chapter: ChapterId };
+export type NavItem = {
+  label: string;
+  chapter: ChapterId;
+  /** Off the home page, this page stands in for the chapter. */
+  page?: string;
+};
 
 /** Primary navigation — each item jumps to a chapter of the story. */
 export const primaryNav: NavItem[] = [
-  { label: "Work", chapter: "work" },
+  { label: "Work", chapter: "work", page: "/work" },
   { label: "Capabilities", chapter: "capabilities" },
   { label: "Process", chapter: "process" },
   { label: "Studio", chapter: "studio" },

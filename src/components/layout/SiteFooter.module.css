@@ -40,6 +40,22 @@
   color: var(--fg);
 }
 
+.nav .archive {
+  display: inline-block;
+  margin-top: var(--space-2);
+  color: var(--fg);
+}
+
+.nav .archive span {
+  display: inline-block;
+  color: var(--accent-soft);
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.nav .archive:hover span {
+  transform: translateX(3px);
+}
+
 .base {
   max-width: var(--max-width);
   margin: var(--space-8) auto 0;

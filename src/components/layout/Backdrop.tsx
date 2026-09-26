@@ -4,9 +4,9 @@ import { useStory } from "@/story/store";
 import type { ChapterId } from "@/story/chapters";
 import styles from "./Backdrop.module.css";
 
-type Scene = "night" | "underwater" | "deep" | "dawn";
+export type BackdropScene = "night" | "underwater" | "deep" | "dawn";
 
-const sceneFor: Record<ChapterId, Scene> = {
+const sceneFor: Record<ChapterId, BackdropScene> = {
   float: "night",
   dive: "underwater",
   problem: "deep",
@@ -21,10 +21,11 @@ const sceneFor: Record<ChapterId, Scene> = {
 /**
  * CSS rendition of each world. It is the loading state before WebGL starts and the designed
  * fallback when WebGL is unavailable — the story still reads without the 3D.
+ * Outside the story (e.g. the 404 page) pass a fixed `scene`.
  */
-export function Backdrop() {
+export function Backdrop({ scene: fixed }: { scene?: BackdropScene }) {
   const active = useStory("active");
-  const scene = sceneFor[active];
+  const scene = fixed ?? sceneFor[active];
   return (
     <div className={styles.backdrop} data-scene={scene} aria-hidden="true">
       <div className={`${styles.layer} ${styles.night}`}>

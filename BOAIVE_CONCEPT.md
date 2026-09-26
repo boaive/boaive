@@ -25,7 +25,7 @@ A person has an idea. It floats. Boaive dives in, explores it, designs and build
 | 2 | What does Boaive do? | Hero lede, Problem, Capabilities |
 | 3 | Can Boaive build what I need? | Problem ("you bring the problem"), Capabilities (incl. CUSTOM) |
 | 4 | How does Boaive work? | Process (Understand → Launch) |
-| 5 | What has Boaive built? | Work — client work first, samples clearly labelled |
+| 5 | What has Boaive built? | Work — client work first, experiments clearly labelled; everything on `/work` |
 | 6 | What would I receive? | Process ("you get …"), Outcome |
 | 7 | How do I start? | Persistent "Let's build", Contact (WhatsApp first) |
 
@@ -42,7 +42,7 @@ Each chapter is a `<section data-chapter="…">` with real, semantic HTML conten
 | 03 | **Problem** | "Your business has a problem. You have an idea. You need something that works." + floating needs | Digital deep: dark, architectural, particles. Needs rise like bubbles. |
 | 04 | **What we build** | Web · AI · Software · Automation · Mobile · Custom | Six forms on a ring. The camera orbits to each. Custom = a box that unfolds ("not limited to a box"). |
 | 05 | **How we build** | Understand → Design → Build → Refine → Launch | One object transforms: scattered points → structure → blueprint → assembled → polished → launched. |
-| 06 | **Work** | Client work, then Samples, each with a case study | Projects are screens in the deep, playing the real site. Selecting one pushes the camera in. |
+| 06 | **Work** | The featured projects (client work, then experiments), each with a case study; closes with "Everything we've built" → `/work` | Featured projects are screens in the deep, playing the real site. Selecting one pushes the camera in. At the end the screens gather into one wall — the archive. |
 | 07 | **Outcome** | "Not just a screen. A working system." | Everything built so far gets connected by light. |
 | 08 | **Studio** | Who we are, how we work | The camera rises toward the light. |
 | 09 | **Surface** | BOAIVE · Float Your Thrive · Let's build · WhatsApp / Instagram / email / call | Sunrise. The boat returns with a sail woven from the connected system and the Boaive mark. The engineer waves. |
@@ -131,12 +131,15 @@ public/                   brand/, work/<slug>/ (posters, galleries, videos)
 ## 7. Content rules
 
 - Never invent client results, metrics, users or revenue. `outcome` is optional in project data and only shown when real.
-- Samples (self-initiated builds) are always labelled **Sample** and grouped separately from **Client work**. Figures and reviews inside sample sites are illustrative, and the site says so.
+- Self-initiated work is never presented as client work. It is `kind: "experiment"` (a build exploring how we'd approach a type of business — the current demo sites) or `kind: "prototype"` (R&D), labelled with a dashed badge, grouped under **Experiments & prototypes**, and carries a disclaimer: figures and reviews inside those sites are illustrative, and the site says so.
 - Copy is concrete and short. Banned: "unlock", "revolutionize", "next-generation", "cutting-edge", "empower … digital future".
 
 ## 8. Adding or changing things
 
-- **New project:** add an entry to `src/data/projects.ts`, drop media in `public/work/<slug>/` (or run `npm run capture -- <slug> <url>`). Layout, 3D screen, case study page, sitemap and OG image pick it up automatically.
+- **New project:** add an entry to `src/data/projects.ts`, drop media in `public/work/<slug>/` (or run `npm run capture -- <slug> <url>`). The `/work` archive, case study page, sitemap and OG image pick it up automatically. Set `featured: true` to also give it a screen in the home story (keep 3–5 featured — the work chapter's scroll length and beats scale with the count).
+
+### The work archive (`/work`)
+The home story only has room for a few screens, so it features a curated set and ends by gathering them into a wall that leads to `/work`. That page is the archive below the story: the same deep water, grid floor, mono annotations and depth gauge (sinking from the work chapter's −140 m as you scroll). It lists every project in two halves — **Client work** (wide rows) and **Experiments & prototypes** (a grid) — each card a framed screen that plays the recorded scroll-through on hover.
 - **Copy:** `src/content/*.ts`.
 - **Contact details / domain:** `src/content/site.ts` (domain can also come from `NEXT_PUBLIC_SITE_URL`).
 - **3D models:** objects are procedural today. To swap in a Blender asset, export GLB (Draco/Meshopt + KTX2 textures), put it in `public/models/`, and replace the body of the matching component in `src/experience/objects/` with `useGLTF` — the scene code only relies on the component's props and group transforms.

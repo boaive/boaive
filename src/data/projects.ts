@@ -6,9 +6,12 @@ import type { MediaImage, Project, ProjectMedia } from "./types";
  * To add a project:
  *   1. Capture visuals:  npm run capture -- <slug> <url> --at="#section|text:Heading"
  *   2. Add an entry below using `workMedia()` to reference the captured files.
- * Everything else (3D screen, case study dialog, /work/<slug> page, sitemap) is automatic.
+ *   3. Set `featured: true` to give it a screen in the home page story (keep 3–5 featured).
+ * Everything else (/work archive, case study dialog + /work/<slug> page, 3D screen, sitemap) is automatic.
  *
- * Rules: never invent outcomes, metrics or client quotes. Samples are always `kind: "sample"`.
+ * Rules: never invent outcomes, metrics or client quotes. Anything that isn't paid client work is
+ * `kind: "experiment"` (a self-initiated build for a type of business) or `"prototype"` (R&D),
+ * and carries a disclaimer.
  */
 
 type MediaSpec = {
@@ -45,6 +48,7 @@ export const projects: Project[] = [
     slug: "shapio3d",
     title: "Shapio 3D",
     kind: "client",
+    featured: true,
     type: "Business website + client tracking portal",
     industry: "3D printing & additive manufacturing",
     capabilities: ["web", "software"],
@@ -82,7 +86,8 @@ export const projects: Project[] = [
   {
     slug: "clinic",
     title: "Boaive Clinic",
-    kind: "sample",
+    kind: "experiment",
+    featured: true,
     type: "Healthcare website",
     industry: "Dental, hair & skin clinic",
     capabilities: ["web"],
@@ -103,21 +108,22 @@ export const projects: Project[] = [
     url: "https://boaive-clinic.vercel.app/",
     status: "live",
     accent: "#c9561a",
-    disclaimer: "Sample build. The clinic, doctors, reviews and figures shown are illustrative.",
-    media: workMedia("clinic", "Boaive Clinic sample", {
+    disclaimer: "The clinic, doctors, reviews and figures shown are illustrative.",
+    media: workMedia("clinic", "Boaive Clinic (experiment)", {
       desktop: [
         "Clinic treatments section with dental, hair and skin tabs",
         "Clinic before and after comparison slider",
         "Clinic doctor profiles",
       ],
       mobile: ["Clinic first screen on a phone", "Clinic treatments on a phone"],
-      video: "A scroll through the clinic sample: hero, treatments, results and doctors.",
+      video: "A scroll through the clinic experiment: hero, treatments, results and doctors.",
     }),
   },
   {
     slug: "restaurant",
     title: "Boaive Restaurant",
-    kind: "sample",
+    kind: "experiment",
+    featured: true,
     type: "Restaurant & lounge website",
     industry: "Fine dining",
     capabilities: ["web"],
@@ -137,21 +143,22 @@ export const projects: Project[] = [
     url: "https://democafeboaive.vercel.app/",
     status: "live",
     accent: "#e0913a",
-    disclaimer: "Sample build. The restaurant, chef, reviews and press mentions shown are illustrative.",
-    media: workMedia("restaurant", "Boaive Restaurant sample", {
+    disclaimer: "The restaurant, chef, reviews and press mentions shown are illustrative.",
+    media: workMedia("restaurant", "Boaive Restaurant (experiment)", {
       desktop: [
         "Restaurant signature dish feature with ingredients and price",
         "Restaurant most-loved dishes with ratings and prices",
         "Restaurant menu browsable by course",
       ],
       mobile: ["Restaurant first screen on a phone", "Restaurant signature dish on a phone"],
-      video: "A scroll through the restaurant sample: hero, signature dishes and menu.",
+      video: "A scroll through the restaurant experiment: hero, signature dishes and menu.",
     }),
   },
   {
     slug: "play",
     title: "Boaive Play",
-    kind: "sample",
+    kind: "experiment",
+    featured: true,
     type: "Entertainment venue website",
     industry: "Gaming & entertainment arena",
     capabilities: ["web"],
@@ -172,39 +179,51 @@ export const projects: Project[] = [
     url: "https://demo-boaive-paly.vercel.app/",
     status: "live",
     accent: "#22d3ee",
-    disclaimer: "Sample build. The venue, prices, events and reviews shown are illustrative.",
-    media: workMedia("play", "Boaive Play sample", {
+    disclaimer: "The venue, prices, events and reviews shown are illustrative.",
+    media: workMedia("play", "Boaive Play (experiment)", {
       desktop: [
         "Arena experiences section listing five zones with prices",
         "Arena passes and pricing comparison",
         "Arena weekly events with live countdowns",
       ],
       mobile: ["Arena first screen on a phone", "Arena experiences on a phone"],
-      video: "A scroll through the arena sample: hero, experiences, pricing and events.",
+      video: "A scroll through the arena experiment: hero, experiences, pricing and events.",
     }),
   },
 ];
 
 export const isClientWork = (p: Project) => p.kind === "client";
-export const isSample = (p: Project) => p.kind === "sample" || p.kind === "experiment";
+/** Experiments & prototypes: self-initiated, never presented as client work. */
+export const isLabWork = (p: Project) => p.kind !== "client";
 
 export const clientProjects = projects.filter(isClientWork);
-export const sampleProjects = projects.filter(isSample);
+export const labProjects = projects.filter(isLabWork);
 
-/** Display order: client work first, then samples. */
-export const orderedProjects = [...clientProjects, ...sampleProjects];
+/** Display order everywhere: client work first, then experiments & prototypes. */
+export const orderedProjects = [...clientProjects, ...labProjects];
+
+/** The screens in the home page's work chapter. */
+export const featuredProjects = orderedProjects.filter((p) => p.featured);
+
+export type WorkGroupId = "client" | "lab";
+
+/** The two halves of the /work archive. */
+export const workGroups: { id: WorkGroupId; projects: Project[] }[] = [
+  { id: "client", projects: clientProjects },
+  { id: "lab", projects: labProjects },
+];
 
 export function getProject(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);
 }
 
-export function kindLabel(p: Project): string {
+export function kindLabel(p: Pick<Project, "kind">): string {
   switch (p.kind) {
     case "client":
       return "Client work";
-    case "sample":
-      return "Sample";
     case "experiment":
       return "Experiment";
+    case "prototype":
+      return "Prototype";
   }
 }

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, IBM_Plex_Mono, Instrument_Serif } from "next/font/google";
 import { InlineScript } from "@/components/InlineScript";
+import { RevealObserver } from "@/components/motion/RevealObserver";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SkipLink } from "@/components/layout/SkipLink";
 import { site } from "@/content/site";
@@ -81,6 +82,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SkipLink />
         <SiteHeader />
         {children}
+        <RevealObserver />
       </body>
     </html>
   );

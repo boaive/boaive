@@ -1,4 +1,5 @@
-import { footerCopy } from "@/content/home";
+import Link from "next/link";
+import { footerCopy, workCopy } from "@/content/home";
 import { primaryNav, site } from "@/content/site";
 import { Logo } from "@/components/brand/Logo";
 import { ContactLinks } from "@/components/contact/ContactLinks";
@@ -21,6 +22,11 @@ export function SiteFooter() {
                 <ChapterLink chapter={item.chapter}>{item.label}</ChapterLink>
               </li>
             ))}
+            <li>
+              <Link href="/work" className={styles.archive}>
+                {workCopy.allWork} <span aria-hidden="true">→</span>
+              </Link>
+            </li>
           </ul>
         </nav>
         <ContactLinks layout="column" className={styles.contact} />

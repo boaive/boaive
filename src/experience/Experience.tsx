@@ -1,13 +1,31 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { Component, type ReactNode, useEffect, useState } from "react";
 import { setStory } from "@/story/store";
 import { detectQuality, probeWebGL } from "./quality";
 import { setStageStatus } from "./status";
 
 /** The WebGL stage is a separate chunk, fetched only after the page is interactive. */
 const Stage = dynamic(() => import("./Stage"), { ssr: false });
+
+/** If the 3D chunk or renderer fails, fall back to the CSS story instead of a broken stage. */
+class StageBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  componentDidCatch(error: unknown) {
+    console.error("3D stage failed; showing the CSS fallback.", error);
+    setStageStatus("unsupported");
+  }
+
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
 
 /**
  * Decides whether (and how) to run the 3D story:
@@ -41,5 +59,9 @@ export function Experience() {
     return () => clearTimeout(id);
   }, []);
 
-  return mount ? <Stage /> : null;
+  return mount ? (
+    <StageBoundary>
+      <Stage />
+    </StageBoundary>
+  ) : null;
 }

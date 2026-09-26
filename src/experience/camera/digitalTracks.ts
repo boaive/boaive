@@ -1,8 +1,8 @@
 import { Vector3 } from "three";
-import { orderedProjects } from "@/data/projects";
+import { featuredProjects } from "@/data/projects";
 import { handoffTimeAt, moments, timeAt } from "@/story/moments";
 import { timing } from "@/story/timing";
-import { formAngle, GALLERY, galleryPosition, PRODUCT_POSITION, RING_CENTRE } from "../choreo/digitalLayout";
+import { formAngle, GALLERY, galleryPosition, PRODUCT_POSITION, RING_CENTRE, WALL } from "../choreo/digitalLayout";
 import { dw } from "../worlds";
 import type { KeySpec } from "./track";
 
@@ -25,7 +25,7 @@ function formShot(i: number): Pick<KeySpec, "pos" | "look"> {
 
 /** Camera for project i: from near the centre, facing its screen. */
 function projectShot(i: number, pull = 0): Pick<KeySpec, "pos" | "look"> {
-  const n = orderedProjects.length;
+  const n = featuredProjects.length;
   const a = GALLERY.angle(i, n);
   const screen = galleryPosition(i, n);
   const d = 4.3 - pull;
@@ -54,6 +54,13 @@ const workKeys: KeySpec[] = timing.work.projects.flatMap(([a, b], i) => [
   { at: () => timeAt("work", Math.min(b, 0.999) - 0.03), ...projectShot(i, 0.3), fov: 40, shift: [0.27, 0], shiftPortrait: [0, 0.22], backPortrait: 1.1 },
 ]);
 
+/** Closing beat: back off to take in the gathered wall of screens — the archive. */
+const wallLook = () => dw(WALL.centre.x, WALL.centre.y, WALL.centre.z);
+const moreKeys: KeySpec[] = [
+  { at: () => timeAt("work", timing.work.more[0] + 0.06), pos: () => dw(0, 13.2, -3.4), look: wallLook, fov: 40, shift: [0.32, 0], shiftPortrait: [0, 0.2], backPortrait: 1.3, ease: "inOut" },
+  { at: () => timeAt("work", 1), pos: () => dw(0, 13.4, -4.6), look: wallLook, fov: 40, shift: [0.32, 0], shiftPortrait: [0, 0.2], backPortrait: 1.3 },
+];
+
 export const digitalKeys: KeySpec[] = [
   // Problem — arriving from the screen: the deep opens up, ideas rise past
   { at: () => moments.enterScreen, pos: () => dw(0, 9.5, 33), look: () => dw(0, 7.5, 0), fov: 40, shift: [0, 0.05], shiftPortrait: [0, 0.05] },
@@ -77,6 +84,7 @@ export const digitalKeys: KeySpec[] = [
   { at: () => handoffTimeAt("work", 0.6), pos: () => dw(0, 10.5, 1), look: () => dw(0, 12.5, 12), fov: 42, shift: [0.1, 0], shiftPortrait: [0, 0.1] },
   { at: () => timeAt("work", 0.06), pos: () => dw(0, 12.2, -1.5), look: () => dw(0, 12.8, 12), fov: 44, shift: [0.2, 0], shiftPortrait: [0, 0.18], ease: "inOut" },
   ...workKeys,
+  ...moreKeys,
 
   // Outcome — pull back and up: everything connected
   { at: () => timeAt("outcome", 0), pos: () => dw(4, 20, 30), look: () => dw(0, 6, 0), fov: 42, shift: [0, -0.04], shiftPortrait: [0, 0], backPortrait: 1.3, ease: "inOut" },

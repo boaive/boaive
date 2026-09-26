@@ -6,7 +6,6 @@ import { getProject, kindLabel, orderedProjects } from "@/data/projects";
 import { introMessage, whatsappHref } from "@/lib/whatsapp";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Button } from "@/components/ui/Button";
-import { ChapterLink } from "@/components/ui/ChapterLink";
 import { ArrowRight, ArrowUpRight } from "@/components/ui/icons";
 import { CaseStudy } from "@/components/work/CaseStudy";
 import { KindBadge } from "@/components/work/KindBadge";
@@ -57,7 +56,7 @@ export default async function WorkPage(props: PageProps<"/work/[slug]">) {
     <>
       <main id="main" className={styles.page}>
         <nav aria-label="Breadcrumb" className={`${styles.crumbs} mono`}>
-          <ChapterLink chapter="work">← All work</ChapterLink>
+          <Link href="/work">← All work</Link>
           <span aria-hidden="true">/</span>
           <span aria-current="page">{project.title}</span>
         </nav>

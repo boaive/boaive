@@ -1,3 +1,5 @@
+import { featuredProjects } from "@/data/projects";
+
 /**
  * Beat timings, as fractions of each chapter's pinned range (0 = stage pins, 1 = stage releases).
  * Imported by the DOM sections (data-beat) AND the 3D scenes, so text and camera stay in sync.
@@ -46,9 +48,12 @@ export const timing = {
     intro: [0, 0.1],
     steps: sequence(5, 0.12, 0.94, true),
   },
+  /** One beat per featured project (the chapter's length grows with the count — see chapters.ts). */
   work: {
     intro: [0, 0.1],
-    projects: sequence(4, 0.12, 0.97, true),
+    projects: sequence(featuredProjects.length, 0.12, 0.87),
+    /** The camera pulls back from the gallery: the way into the full archive. */
+    more: [0.87, 1],
   },
   outcome: {
     heading: [0, 1],
