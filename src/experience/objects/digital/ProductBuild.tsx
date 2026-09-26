@@ -96,9 +96,20 @@ function blueprintSegments(p: PanelDef): [Vector3, Vector3][] {
   return segs;
 }
 
-function buildVoxels(count: number): Voxel[] {
+/** Overall width of the ordered block, whatever the piece count. */
+const LATTICE_SPAN = 3.36;
+
+/**
+ * The pieces, plus the size one piece has in the ordered block. The block stays a near-cube (L×L columns,
+ * M layers) at the same overall size for any count, so phones get fewer, bigger pieces rather than a flat
+ * slab: 720 → 9×9×8 (the original), 480 → 8×8×7, 300 → 7×7×6. Pieces beyond L·L·M share a slot (unseen).
+ */
+function buildVoxels(count: number): { voxels: Voxel[]; piece: number } {
   const voxels: Voxel[] = [];
   const e = new Euler();
+  const L = Math.max(2, Math.round(Math.cbrt((count * 9) / 8)));
+  const M = Math.max(1, Math.floor(count / (L * L)));
+  const spacing = LATTICE_SPAN / (L - 1);
   PANELS.forEach((panel, pi) => {
     const n = pi === PANELS.length - 1 ? count - voxels.length : Math.round(count * panel.share);
     const [w, h, d] = panel.size;
@@ -138,8 +149,12 @@ function buildVoxels(count: number): Voxel[] {
       const ph = Math.acos(2 * hash(i * 3.1) - 1);
       const chaos = new Vector3(Math.sin(ph) * Math.cos(th2) * r, Math.cos(ph) * r * 0.6 + 0.3, Math.sin(ph) * Math.sin(th2) * r);
       e.set(hash(i * 4.1) * 6.28, hash(i * 5.2) * 6.28, hash(i * 6.3) * 6.28);
-      const L = 9;
-      const lattice = new Vector3(((i % L) - (L - 1) / 2) * 0.42, (Math.floor(i / (L * L)) % 8) * 0.42 - 1.2, ((Math.floor(i / L) % L) - (L - 1) / 2) * 0.42);
+      const slot = i % (L * L * M);
+      const lattice = new Vector3(
+        ((slot % L) - (L - 1) / 2) * spacing,
+        Math.floor(slot / (L * L)) * spacing - 1.2,
+        ((Math.floor(slot / L) % L) - (L - 1) / 2) * spacing,
+      );
       voxels.push({
         chaos,
         chaosRot: new Quaternion().setFromEuler(e),
@@ -157,7 +172,8 @@ function buildVoxels(count: number): Voxel[] {
       });
     }
   });
-  return voxels;
+  // a piece fills a third of its cell, as in the original 0.42 grid
+  return { voxels, piece: spacing / 3 };
 }
 
 /** Staggered 0..1 progress for one voxel inside a transition. */
@@ -168,7 +184,7 @@ export function ProductBuild({ count }: { count: number }) {
   const voxelsRef = useRef<InstancedMesh>(null);
   const solids = useRef<Group>(null);
   const pulseRef = useRef<Group>(null);
-  const voxels = useMemo(() => buildVoxels(count), [count]);
+  const { voxels, piece } = useMemo(() => buildVoxels(count), [count]);
   const assets = useMemo(() => {
     const blueprint = new BufferGeometry();
     const pts: number[] = [];
@@ -250,7 +266,7 @@ export function ProductBuild({ count }: { count: number }) {
         const u1 = stagger(fU, v.delay);
         p.lerpVectors(tmpV.copy(v.chaos).add(drift), v.lattice, u1);
         q.slerpQuaternions(v.chaosRot, tmpQ.identity(), u1);
-        const sc = 0.065 + 0.075 * u1;
+        const sc = 0.065 + (piece - 0.065) * u1;
         s.set(sc, sc, sc);
         if (fD > 0) {
           const u2 = stagger(fD, v.delay, 0.5);
