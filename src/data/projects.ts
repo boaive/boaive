@@ -23,15 +23,18 @@ type MediaSpec = {
   pages?: Record<string, string>;
   /** Description of the scroll-through video, if captured. */
   video?: string;
+  /** Description of poster.webp when it isn't the first screen (replaced after capture). */
+  poster?: string;
 };
 
 /** Builds media paths from the naming convention used by scripts/capture-project.mjs. */
 function workMedia(slug: string, title: string, spec: MediaSpec): ProjectMedia {
   const base = `/work/${slug}`;
   const desktop = (src: string, alt: string): MediaImage => ({ src, alt, width: 1600, height: 1000 });
+  const posterAlt = spec.poster ?? `${title} — first screen on desktop`;
   return {
-    poster: desktop(`${base}/poster.webp`, `${title} — first screen on desktop`),
-    posterSmall: { src: `${base}/poster-sm.webp`, alt: `${title} — first screen on desktop`, width: 800, height: 500 },
+    poster: desktop(`${base}/poster.webp`, posterAlt),
+    posterSmall: { src: `${base}/poster-sm.webp`, alt: posterAlt, width: 800, height: 500 },
     gallery: [
       ...spec.desktop.map((alt, i) => desktop(`${base}/desktop-${i + 1}.webp`, alt)),
       ...Object.entries(spec.pages ?? {}).map(([name, alt]) => desktop(`${base}/page-${name}.webp`, alt)),
@@ -84,39 +87,44 @@ export const projects: Project[] = [
       "Problem/approach framing is written from the live site. Confirm with the team (brief, year, scope, admin side of the tracking portal) before launch.",
   },
   {
-    slug: "clinic",
-    title: "Boaive Clinic",
+    slug: "burger",
+    title: "Burger Experiment",
     kind: "experiment",
     featured: true,
-    type: "Healthcare website",
-    industry: "Dental, hair & skin clinic",
+    type: "Scroll-driven 3D brand site",
+    industry: "Burger joint",
     capabilities: ["web"],
     summary:
-      "A neighbourhood clinic site built around one job: helping a patient find the right department and book a visit without calling around.",
+      "A fictional burger joint told in one scroll: the burger builds itself in 3D, one layer at a time, then each layer becomes a lesson in what makes a site memorable.",
     problem:
-      "Multi-speciality clinics often have websites that list everything and explain nothing. Patients want three answers fast: do you treat my problem, can I trust you, and how do I book?",
+      "Most food websites are a hero photo and a menu. We wanted to find out whether a small food brand could be remembered the way a good meal is — by watching it being made.",
     approach:
-      "Treatments are grouped by department behind a simple switcher. Trust comes from doctor profiles, a before/after comparison and upfront language about pricing. Booking is one tap away, by WhatsApp or phone, from every section.",
+      "The homepage is one scroll-driven 3D scene. Each step drops an ingredient into place, labelled like a technical drawing with its name and how it's prepared. Fries and a cola join the finished burger; then it comes apart into its eight layers, each relabelled as part of a digital experience — structure, story, identity, motion, detail. The menu and story pages keep the same voice.",
     built: [
-      "Department switcher for dental, hair and skin treatments",
-      "Draggable before/after comparison",
-      "Doctor profiles, reviews and FAQs",
-      "Appointment requests via WhatsApp and phone",
-      "Location, hours and local search structure",
+      "Scroll-driven 3D build: ten pieces land one by one, each labelled as it arrives",
+      "A finale that takes the burger apart and relabels each layer as part of a website",
+      "Menu with hands-on items: take the burger apart, shake the fries, poke the cream",
+      "Story page for the imaginary joint",
+      "A text description of the animated scene for screen readers",
     ],
-    technologies: ["Next.js", "React"],
-    url: "https://boaive-clinic.vercel.app/",
+    technologies: ["Next.js", "React", "Three.js"],
+    url: "https://theburgerexperiment.netlify.app/",
     status: "live",
-    accent: "#c9561a",
-    disclaimer: "The clinic, doctors, reviews and figures shown are illustrative.",
-    media: workMedia("clinic", "Boaive Clinic (experiment)", {
+    accent: "#e4472d",
+    disclaimer: "The burger joint, menu, prices and reviews are fictional.",
+    media: workMedia("burger", "Burger Experiment (experiment)", {
+      poster: "The finished burger in 3D with its eight layers labelled, beside “Eight layers. No shortcuts.”",
       desktop: [
-        "Clinic treatments section with dental, hair and skin tabs",
-        "Clinic before and after comparison slider",
-        "Clinic doctor profiles",
+        "Burger layers dropping into place, each labelled like a technical drawing",
+        "The finished burger beside fries and a cola",
+        "Menu teaser: House Special, Loaded Fries and Strawberry Shake",
       ],
-      mobile: ["Clinic first screen on a phone", "Clinic treatments on a phone"],
-      video: "A scroll through the clinic experiment: hero, treatments, results and doctors.",
+      pages: {
+        menu: "Menu page: “Four burgers. A few sides. Cold drinks.” with order tickets pinned to a rail",
+        story: "Story page: “Messy hands. Good decisions.” beside a 3D burger",
+      },
+      mobile: ["Burger experiment first screen on a phone", "The burger being built on a phone"],
+      video: "A scroll through the burger experiment: the burger builds layer by layer, fries and a cola join it, then the menu.",
     }),
   },
   {
@@ -188,6 +196,43 @@ export const projects: Project[] = [
       ],
       mobile: ["Arena first screen on a phone", "Arena experiences on a phone"],
       video: "A scroll through the arena experiment: hero, experiences, pricing and events.",
+    }),
+  },
+  {
+    slug: "clinic",
+    title: "Boaive Clinic",
+    kind: "experiment",
+    // in the /work archive only; its home page screen went to the burger experiment
+    featured: false,
+    type: "Healthcare website",
+    industry: "Dental, hair & skin clinic",
+    capabilities: ["web"],
+    summary:
+      "A neighbourhood clinic site built around one job: helping a patient find the right department and book a visit without calling around.",
+    problem:
+      "Multi-speciality clinics often have websites that list everything and explain nothing. Patients want three answers fast: do you treat my problem, can I trust you, and how do I book?",
+    approach:
+      "Treatments are grouped by department behind a simple switcher. Trust comes from doctor profiles, a before/after comparison and upfront language about pricing. Booking is one tap away, by WhatsApp or phone, from every section.",
+    built: [
+      "Department switcher for dental, hair and skin treatments",
+      "Draggable before/after comparison",
+      "Doctor profiles, reviews and FAQs",
+      "Appointment requests via WhatsApp and phone",
+      "Location, hours and local search structure",
+    ],
+    technologies: ["Next.js", "React"],
+    url: "https://boaive-clinic.vercel.app/",
+    status: "live",
+    accent: "#c9561a",
+    disclaimer: "The clinic, doctors, reviews and figures shown are illustrative.",
+    media: workMedia("clinic", "Boaive Clinic (experiment)", {
+      desktop: [
+        "Clinic treatments section with dental, hair and skin tabs",
+        "Clinic before and after comparison slider",
+        "Clinic doctor profiles",
+      ],
+      mobile: ["Clinic first screen on a phone", "Clinic treatments on a phone"],
+      video: "A scroll through the clinic experiment: hero, treatments, results and doctors.",
     }),
   },
 ];
