@@ -44,7 +44,7 @@ export function HeroSection() {
 
       <div className={styles.cue} data-beat={beat([0, 0.12])} data-dy="0" aria-hidden="true">
         <span className={styles.cueLine} />
-        <span className="mono">{heroCopy.scrollCue}</span>
+        <span className={`${styles.cueText} mono legible`}>{heroCopy.scrollCue}</span>
       </div>
     </Chapter>
   );
