@@ -13,8 +13,9 @@ import { CaseStudy } from "@/components/work/CaseStudy";
 import { KindBadge } from "@/components/work/KindBadge";
 import styles from "./page.module.css";
 
-export const dynamicParams = false;
-
+// Pages are prerendered, but a cache miss must render on demand rather than 404:
+// on Cloudflare (OpenNext) the prerendered entries aren't always found. Unknown slugs
+// still 404 through notFound() below.
 export function generateStaticParams() {
   return orderedProjects.map((p) => ({ slug: p.slug }));
 }
