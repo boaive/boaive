@@ -58,7 +58,9 @@ export const metadata: Metadata = {
     title: site.seo.title,
     description: site.seo.description,
   },
-  robots: { index: true, follow: true },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
+  // Search Console "HTML tag" verification — set GOOGLE_SITE_VERIFICATION in the hosting environment.
+  verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
   formatDetection: { telephone: false, email: false, address: false },
 };
 

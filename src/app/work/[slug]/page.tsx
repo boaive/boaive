@@ -3,8 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { contactCopy } from "@/content/home";
 import { getProject, kindLabel, orderedProjects } from "@/data/projects";
+import { breadcrumbs, creativeWork, graph } from "@/lib/schema";
 import { introMessage, whatsappHref } from "@/lib/whatsapp";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Button } from "@/components/ui/Button";
 import { ArrowRight, ArrowUpRight } from "@/components/ui/icons";
 import { CaseStudy } from "@/components/work/CaseStudy";
@@ -83,6 +85,15 @@ export default async function WorkPage(props: PageProps<"/work/[slug]">) {
         </section>
       </main>
       <SiteFooter />
+      <JsonLd
+        data={graph(
+          creativeWork(project),
+          breadcrumbs([
+            { name: "Work", path: "/work" },
+            { name: project.title, path: `/work/${project.slug}` },
+          ]),
+        )}
+      />
     </>
   );
 }

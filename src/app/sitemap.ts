@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: "yearly" as const,
       priority: project.kind === "client" ? 0.8 : 0.6,
+      images: [`${site.url}${project.media.poster.src}`],
     })),
   ];
 }
