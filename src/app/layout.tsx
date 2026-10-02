@@ -59,8 +59,8 @@ export const metadata: Metadata = {
     description: site.seo.description,
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
-  // Search Console "HTML tag" verification — set GOOGLE_SITE_VERIFICATION in the hosting environment.
-  verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
+  // Search Console "HTML tag" ownership token (public by design). Keep it: removing it unverifies the property.
+  verification: { google: process.env.GOOGLE_SITE_VERIFICATION ?? "uHAnSO6gfxXIi0qlgz5OBVDV7KpwZJoK7_Lq880t7DU" },
   formatDetection: { telephone: false, email: false, address: false },
 };
 
