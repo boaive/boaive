@@ -36,12 +36,20 @@ export function CapabilitiesSection() {
               {cap.name}
             </h3>
             <p className={`${styles.headline} t-h4 legible`}>{cap.headline}</p>
-            <p className={`${styles.description} legible`}>{cap.description}</p>
-            <ul role="list" className={styles.items}>
-              {cap.items.map((item) => (
-                <li key={item}>{item}</li>
+            <dl className={styles.flow}>
+              {(
+                [
+                  ["Problem", cap.problem],
+                  ["What we build", cap.build],
+                  ["Outcome", cap.outcome],
+                ] as const
+              ).map(([label, text]) => (
+                <div key={label} className={styles.row}>
+                  <dt className="mono">{label}</dt>
+                  <dd className="legible">{text}</dd>
+                </div>
               ))}
-            </ul>
+            </dl>
           </article>
         ))}
 
@@ -55,7 +63,7 @@ export function CapabilitiesSection() {
         chapter="capabilities"
         label="Capabilities"
         className={styles.index}
-        steps={capabilities.map((cap, i) => ({ id: cap.id, label: cap.name, range: [...t.items[i]] as [number, number] }))}
+        steps={capabilities.map((cap, i) => ({ id: cap.id, label: cap.short, range: [...t.items[i]] as [number, number] }))}
       />
     </Chapter>
   );

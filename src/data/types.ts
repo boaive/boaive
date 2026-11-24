@@ -1,11 +1,18 @@
-export type CapabilityId = "web" | "ai" | "software" | "automation" | "mobile" | "custom";
+export type CapabilityId = "ai" | "automation" | "software" | "cloud" | "data" | "digital";
 
 export interface Capability {
   id: CapabilityId;
   name: string;
+  /** One word, for the index and compact labels. */
+  short: string;
   /** One confident line. */
   headline: string;
-  description: string;
+  /** The business problem it answers. */
+  problem: string;
+  /** What Boaive builds. */
+  build: string;
+  /** The practical outcome, stated without invented metrics. */
+  outcome: string;
   items: string[];
 }
 

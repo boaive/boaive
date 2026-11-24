@@ -4,7 +4,7 @@ How search works on boaive.com: what's built in the code, what has to be done ou
 
 **Positioning (use these exact words everywhere — site, schema, Google Business Profile, Instagram, LinkedIn):**
 
-> **Boaive — Creative Website Design & Development Studio**, based in Chengalpattu, serving Chennai and India.
+> **Boaive — AI, Custom Software & Cloud Engineering Studio**, based in Chengalpattu, serving Chennai and India.
 
 Brand name is always **Boaive**. Don't use "Boaive Tech" / "Boaive Technologies" on profiles unless one becomes a registered legal name — then add it as `legalName` in `src/lib/schema.ts`.
 

@@ -11,7 +11,9 @@ import { HeroSection } from "@/components/sections/HeroSection";
 import { OutcomeSection } from "@/components/sections/OutcomeSection";
 import { ProblemSection } from "@/components/sections/ProblemSection";
 import { ProcessSection } from "@/components/sections/ProcessSection";
+import { StackSection } from "@/components/sections/StackSection";
 import { StudioSection } from "@/components/sections/StudioSection";
+import { UseCasesSection } from "@/components/sections/UseCasesSection";
 import { WorkSection } from "@/components/sections/WorkSection";
 import { ProjectDialog } from "@/components/work/ProjectDialog";
 import { Experience } from "@/experience/Experience";
@@ -35,6 +37,8 @@ export default function HomePage() {
         <DiveSection />
         <ProblemSection />
         <CapabilitiesSection />
+        <StackSection />
+        <UseCasesSection />
         <ProcessSection />
         <WorkSection />
         <OutcomeSection />

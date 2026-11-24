@@ -52,20 +52,20 @@ export const projects: Project[] = [
     title: "Shapio 3D",
     kind: "client",
     featured: true,
-    type: "Business website + client tracking portal",
+    type: "Customer journey + order-tracking portal",
     industry: "3D printing & additive manufacturing",
-    capabilities: ["web", "software"],
+    capabilities: ["software", "digital"],
     summary:
-      "The website and customer front door for a 3D printing company — from a first question or file upload to tracking an order.",
+      "The customer journey for a 3D printing company, end to end: from a first question or file upload to following an order in a tracking portal, with a website as the front door.",
     problem:
       "Shapio 3D makes prototypes, functional parts and production runs for engineers, manufacturers, researchers and students. Customers arrive with very different starting points — a finished CAD file, a rough idea, a batch of thousands — and need to know quickly whether Shapio can make it and how to get started.",
     approach:
-      "We organised a broad catalogue into clear application areas, explained the ordering process in four steps, and kept the two things customers actually want to do — send a file, ask a question — within reach on every screen. After ordering, customers can follow their request themselves instead of calling for updates.",
+      "We designed the whole journey, not just the pages. A customer sends a file or a question, gets a tracking ID, and can follow the status of their request in a portal instead of calling for updates. Around that workflow, we organised a broad catalogue into clear application areas, explained the ordering process in four steps, and kept the two things customers actually want to do — send a file, ask a question — within reach on every screen.",
     built: [
-      "Marketing website: services, applications, process and project showcase",
       "Quote request form that accepts 3D models (STL, STEP) and reference images",
-      "WhatsApp contact path throughout the site",
       "Client portal to track a request's status with a tracking ID",
+      "WhatsApp contact path throughout the site",
+      "Marketing website: services, applications, process and project showcase",
       "Video-led hero sections, responsive from phone to desktop",
     ],
     technologies: ["React", "React Router", "Vite", "GSAP"],
@@ -93,7 +93,7 @@ export const projects: Project[] = [
     featured: true,
     type: "Scroll-driven 3D brand site",
     industry: "Burger joint",
-    capabilities: ["web"],
+    capabilities: ["digital"],
     summary:
       "A fictional burger joint told in one scroll: the burger builds itself in 3D, one layer at a time, then each layer becomes a lesson in what makes a site memorable.",
     problem:
@@ -134,7 +134,7 @@ export const projects: Project[] = [
     featured: true,
     type: "Restaurant & lounge website",
     industry: "Fine dining",
-    capabilities: ["web"],
+    capabilities: ["digital"],
     summary: "A fine-dining site that sells the evening, not just the menu — and turns interest into reservations.",
     problem:
       "Restaurant websites are often a PDF menu and a phone number. Guests decide on atmosphere, signature dishes and how easy it is to reserve a table.",
@@ -169,7 +169,7 @@ export const projects: Project[] = [
     featured: true,
     type: "Entertainment venue website",
     industry: "Gaming & entertainment arena",
-    capabilities: ["web"],
+    capabilities: ["digital"],
     summary:
       "An arena site with five bookable zones, side-by-side passes, live tournament countdowns and a filterable gallery.",
     problem:
@@ -206,7 +206,7 @@ export const projects: Project[] = [
     featured: false,
     type: "Healthcare website",
     industry: "Dental, hair & skin clinic",
-    capabilities: ["web"],
+    capabilities: ["digital"],
     summary:
       "A neighbourhood clinic site built around one job: helping a patient find the right department and book a visit without calling around.",
     problem:
@@ -267,7 +267,7 @@ export function kindLabel(p: Pick<Project, "kind">): string {
     case "client":
       return "Client work";
     case "experiment":
-      return "Experiment";
+      return "Concept build";
     case "prototype":
       return "Prototype";
   }

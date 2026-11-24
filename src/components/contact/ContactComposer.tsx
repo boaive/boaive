@@ -11,8 +11,10 @@ import styles from "./ContactComposer.module.css";
  * Not a form: pick what you need, and WhatsApp opens with a clear, editable first message.
  */
 export function ContactComposer() {
-  const [topic, setTopic] = useState<NeedTopic>("website");
+  const [topic, setTopic] = useState<NeedTopic>("ai");
+  const [brief, setBrief] = useState("");
   const name = useId();
+  const briefId = useId();
 
   return (
     <div className={styles.composer}>
@@ -33,8 +35,22 @@ export function ContactComposer() {
           ))}
         </div>
       </fieldset>
+      <div className={styles.brief}>
+        <label htmlFor={briefId} className={`${styles.legend} mono`}>
+          {contactCopy.briefLabel}
+        </label>
+        <textarea
+          id={briefId}
+          className={styles.textarea}
+          rows={2}
+          maxLength={400}
+          value={brief}
+          onChange={(e) => setBrief(e.target.value)}
+          placeholder={contactCopy.briefPlaceholder}
+        />
+      </div>
       <Button
-        href={whatsappHref(topicMessage(topic))}
+        href={whatsappHref(topicMessage(topic, brief))}
         external
         size="lg"
         icon={<WhatsAppIcon size={20} />}

@@ -72,3 +72,24 @@
   height: 1px;
   background: var(--line-strong);
 }
+
+/*
+ * When a chapter releases, its stage (and label) scrolls up under the transparent header and would
+ * collide with the logo. Fade the label out as it nears the header. The padding/negative margin
+ * lengthen the fade distance without moving the label.
+ */
+@supports (animation-timeline: view()) {
+  .label {
+    padding-block: 1rem;
+    margin-block: -1rem;
+    animation: labelExit linear forwards;
+    animation-timeline: view(block 100px 0px);
+    animation-range: exit 0% exit 100%;
+  }
+
+  @keyframes labelExit {
+    to {
+      opacity: 0;
+    }
+  }
+}
