@@ -2,9 +2,9 @@
 
 # BOAIVE — project context
 
-Official site for **Boaive** ("Float Your Thrive", boat + thrive), a digital studio: websites, software, apps, AI assistants, automation. The home page is one continuous, scroll-driven 3D story; `BOAIVE_CONCEPT.md` is the creative/technical source of truth — read it before changing the story, visual language or 3D architecture.
+Official site for **Boaive** ("Float Your Thrive", boat + thrive), an AI, custom software and cloud engineering studio (websites and apps are one capability, not the identity). The home page is one continuous, scroll-driven 3D story; `BOAIVE_CONCEPT.md` is the creative/technical source of truth — read it before changing the story, visual language or 3D architecture.
 
-Story: boat at night → laptop slips overboard → dive → into the screen → digital deep → problem → what we build (6 capabilities) → how we build (5 steps) → work → outcome ("Not just a screen. A working system.") → studio → surface at sunrise (the boat returns with the finished product) → "Let's build".
+Story: boat at night → laptop slips overboard → dive → into the screen → digital deep → problem → what we build (6 capabilities: AI, Automation, Software, Cloud, Data, Digital) → technology stack → use cases → how we engineer (5 steps) → work → outcome ("Not just a screen. A working system.") → studio → surface at sunrise (the boat returns with the finished product) → "Let's build".
 
 ## Commands
 

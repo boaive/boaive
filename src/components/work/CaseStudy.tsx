@@ -83,11 +83,11 @@ export function CaseStudy({ project, headingLevel = 2, headingId }: Props) {
           <p>{project.problem}</p>
         </section>
         <section className={styles.block}>
-          <Sub className={`${styles.blockTitle} mono`}>The approach</Sub>
+          <Sub className={`${styles.blockTitle} mono`}>The solution</Sub>
           <p>{project.approach}</p>
         </section>
         <section className={styles.block}>
-          <Sub className={`${styles.blockTitle} mono`}>What we built</Sub>
+          <Sub className={`${styles.blockTitle} mono`}>Key features</Sub>
           <ul role="list" className={styles.built}>
             {project.built.map((item) => (
               <li key={item}>{item}</li>

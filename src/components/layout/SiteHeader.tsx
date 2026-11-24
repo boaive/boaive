@@ -85,7 +85,7 @@ export function SiteHeader() {
           <SoundToggle />
         </span>
         <Button href={whatsappHref(introMessage())} external size="sm" icon={<ArrowUpRight size={15} />} className={styles.cta}>
-          Let&apos;s build
+          Discuss a project
         </Button>
         {/* Compact screens: an icon beside the menu button, in the same spot as in the open menu. */}
         <span className={styles.soundCompact}>
@@ -134,7 +134,7 @@ export function SiteHeader() {
           </nav>
           <div className={styles.menuFoot}>
             <Button href={whatsappHref(introMessage())} external icon={<ArrowUpRight size={16} />}>
-              Let&apos;s build on WhatsApp
+              Discuss a project on WhatsApp
             </Button>
             <ContactLinks whatsapp={false} layout="column" />
           </div>

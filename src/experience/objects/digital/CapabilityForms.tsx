@@ -429,7 +429,8 @@ function FormCustom({ index, m }: { index: number; m: Mats }) {
   );
 }
 
-const FORMS = [FormWeb, FormAI, FormSoftware, FormAutomation, FormMobile, FormCustom];
+// Same order as `capabilities` (data/capabilities.ts): AI, Automation, Software, Cloud, Data, Digital.
+const FORMS = [FormAI, FormAutomation, FormSoftware, FormCustom, FormWeb, FormMobile];
 
 /** A form on the ring, facing outward (toward the camera's orbit). */
 function Station({ index, children }: { index: number; children: ReactNode }) {

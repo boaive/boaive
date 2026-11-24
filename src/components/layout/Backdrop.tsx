@@ -11,6 +11,8 @@ const sceneFor: Record<ChapterId, BackdropScene> = {
   dive: "underwater",
   problem: "deep",
   capabilities: "deep",
+  stack: "deep",
+  usecases: "deep",
   process: "deep",
   work: "deep",
   outcome: "deep",

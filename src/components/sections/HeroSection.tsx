@@ -30,7 +30,7 @@ export function HeroSection() {
               <Button href={whatsappHref(introMessage())} external icon={<ArrowUpRight />}>
                 {heroCopy.primaryCta}
               </Button>
-              <ChapterLink chapter="work" variant="secondary" icon={<ArrowRight />}>
+              <ChapterLink chapter="capabilities" variant="secondary" icon={<ArrowRight />}>
                 {heroCopy.secondaryCta}
               </ChapterLink>
             </div>

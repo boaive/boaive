@@ -1,33 +1,38 @@
 import { site } from "@/content/site";
 import type { Project } from "@/data/types";
 
-export type NeedTopic = "website" | "app" | "ai" | "automation" | "software" | "unsure";
+export type NeedTopic = "ai" | "automation" | "software" | "cloud" | "data" | "digital" | "idea";
 
-/** Options for the contact composer ("What do you need?"). */
+/** Options for the contact composer ("What do you need?"): the six capability groups, plus an open door. */
 export const needTopics: { id: NeedTopic; label: string; phrase: string }[] = [
-  { id: "website", label: "Website", phrase: "a website" },
-  { id: "app", label: "App", phrase: "a mobile or web app" },
-  { id: "ai", label: "AI assistant", phrase: "an AI assistant or chatbot" },
-  { id: "automation", label: "Automation", phrase: "automating part of our work" },
-  { id: "software", label: "Software / system", phrase: "custom software or an internal system" },
-  { id: "unsure", label: "Not sure yet", phrase: "" },
+  { id: "ai", label: "AI & Agentic Systems", phrase: "AI assistants or agentic systems" },
+  { id: "automation", label: "Intelligent Automation", phrase: "automating part of our work" },
+  { id: "software", label: "Custom Software & Platforms", phrase: "custom software or a business platform" },
+  { id: "cloud", label: "Cloud & DevOps", phrase: "cloud and DevOps engineering" },
+  { id: "data", label: "Data & Analytics", phrase: "data and analytics" },
+  { id: "digital", label: "Digital Experiences", phrase: "a website, web app or mobile app" },
+  { id: "idea", label: "I'm exploring an idea", phrase: "" },
 ];
 
 export function whatsappHref(message: string): string {
   return `https://wa.me/${site.contact.whatsapp.number}?text=${encodeURIComponent(message)}`;
 }
 
-/** Default message used by the persistent "Let's build" button. */
+/** Default message used by the persistent "Discuss a project" button. */
 export function introMessage(): string {
   return "Hi Boaive, I found you through your website and I'd like to talk about a project.";
 }
 
-export function topicMessage(topic: NeedTopic): string {
+export function topicMessage(topic: NeedTopic, brief = ""): string {
   const need = needTopics.find((t) => t.id === topic);
+  const text = brief.trim();
   if (!need || !need.phrase) {
-    return "Hi Boaive, I found you through your website. I have an idea (or a problem) I'd like to talk through, but I'm not sure yet what needs to be built.";
+    const base =
+      "Hi Boaive, I found you through your website. I'm exploring an idea (or a problem) and I'm not sure yet what needs to be built.";
+    return text ? `${base} What I'm trying to improve: ${text}` : base;
   }
-  return `Hi Boaive, I found you through your website. I'm looking for help with ${need.phrase}. A bit of context about my business:`;
+  const base = `Hi Boaive, I found you through your website. I'm looking for help with ${need.phrase}.`;
+  return text ? `${base} What I'm trying to improve: ${text}` : `${base} A bit of context about my business:`;
 }
 
 export function similarProjectMessage(project: Pick<Project, "title">): string {

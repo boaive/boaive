@@ -4,22 +4,22 @@
  */
 
 export const heroCopy = {
-  eyebrow: "Digital product studio",
-  title: "From idea to something that works.",
-  lede: "Boaive designs and builds websites, software, apps, AI assistants and automation. We start from the problem, not from a template.",
+  eyebrow: "AI, software & cloud engineering",
+  title: "Intelligent business systems, engineered.",
+  lede: "We build intelligent automation, AI-powered applications and cloud-native platforms. We start from the problem, not from a template.",
   tagline: "Float your thrive",
   scrollCue: "Scroll to dive in",
-  primaryCta: "Let's build",
-  secondaryCta: "See the work",
+  primaryCta: "Discuss a project",
+  secondaryCta: "Explore capabilities",
   /** Appears while the boat scene plays. */
-  floating: "Every product starts as an idea, floating somewhere.",
+  floating: "Every system starts as an idea, floating somewhere.",
 } as const;
 
 export const diveCopy = {
   /** Visually hidden heading for the chapter. */
   heading: "Diving into the problem",
   splash: "So we dive in.",
-  surface: "Good products aren't built on the surface.",
+  surface: "Good systems aren't built on the surface.",
   deeper: "We go deep — into the problem, the business and the people who'll use it.",
   enter: "Step inside",
 } as const;
@@ -37,28 +37,83 @@ export const problemCopy = {
 export const capabilitiesCopy = {
   heading: "Built around what your business actually needs.",
   intro:
-    "We don't sell fixed packages. These are the kinds of things we build — and most real projects combine a few of them.",
+    "We don't sell fixed packages. These are the six areas we engineer in, and most real projects combine a few of them.",
   close: {
     lead: "Doesn't fit a box? Good.",
     follow: "Bring the problem. We'll figure out what needs to be built.",
   },
 } as const;
 
+export const stackCopy = {
+  heading: "Technology we work with.",
+  intro: "Grouped by what it's for. The stack is selected around your project's requirements, not the other way round.",
+  note: "We choose tools to fit the problem, your team and your budget.",
+  groups: [
+    {
+      title: "AI",
+      items: ["LLM APIs", "Retrieval-augmented generation (RAG)", "Vector search", "Embeddings", "Agent frameworks", "Model integrations"],
+    },
+    {
+      title: "Cloud & DevOps",
+      items: ["AWS", "Docker", "Kubernetes", "CI/CD", "Infrastructure as code", "Monitoring & observability"],
+    },
+    {
+      title: "Engineering",
+      items: ["Frontend frameworks", "Backend languages", "APIs", "SQL & NoSQL databases", "Authentication systems"],
+    },
+  ],
+} as const;
+
+export const useCasesCopy = {
+  heading: "What we can build for your business.",
+  intro: "Concrete examples of what you can buy, grouped by the outcome you're after.",
+  note: "These are example solutions we can build. They are concepts, not completed client deployments.",
+  groups: [
+    {
+      outcome: "Reduce repetitive work",
+      examples: [
+        { title: "Internal AI knowledge assistant", text: "Ask questions in plain language and get answers from your own documents and policies." },
+        { title: "Document-processing workflow", text: "Pull the data out of invoices, forms and emails, check it and route it for approval." },
+      ],
+    },
+    {
+      outcome: "Improve customer response",
+      examples: [
+        { title: "Customer-support automation", text: "Answer common questions instantly, and hand the rest to your team with the context attached." },
+      ],
+    },
+    {
+      outcome: "Centralise operations",
+      examples: [
+        { title: "Custom CRM / ERP-style platform", text: "Customers, orders, stock and tasks in one system shaped around how you work." },
+      ],
+    },
+    {
+      outcome: "Gain visibility into performance",
+      examples: [
+        { title: "Inventory or operations dashboard", text: "Live numbers from the tools you already use, in one place your team can read." },
+        { title: "Cloud deployment & monitoring setup", text: "Repeatable releases and alerts, so you know when something is wrong before customers do." },
+      ],
+    },
+  ],
+} as const;
+
 export const processCopy = {
-  heading: "From idea to working product.",
-  intro: "Five steps, in plain language. You always know where we are and what comes next.",
+  heading: "How we engineer.",
+  intro:
+    "Five steps, in plain language. Security, scalability, maintainability and integrations are planned in from the start, where they matter.",
   deliverableLabel: "You get",
 } as const;
 
 export const workCopy = {
   heading: "Things we've built.",
   intro:
-    "Real sites, live today. Client work first — then experiments: builds we made ourselves to explore how we'd approach a type of business.",
+    "Client work first, then experiments: concept builds we made ourselves to explore how we'd approach a type of business. Each case study covers the problem, the solution, the features and the technology.",
   clientLabel: "Client work",
   labLabel: "Experiments & prototypes",
   labNote:
-    "Self-initiated builds, not client projects. The businesses, people, reviews and numbers inside them are illustrative.",
-  labNotice: "Self-initiated — not a client project.",
+    "Self-initiated concept builds, not client projects. The businesses, people, reviews and numbers inside them are illustrative.",
+  labNotice: "Self-initiated concept build — not a client project.",
   openCaseStudy: "View case study",
   visitSite: "Visit live site",
   similar: "Start something similar",
@@ -78,7 +133,7 @@ export const archiveCopy = {
   description:
     "Every Boaive project in one place: client work for real businesses, plus the experiments and prototypes where we try ideas out.",
   heading: "Everything we've built.",
-  lede: "Client work for real businesses — and the experiments and prototypes where we try ideas out on our own. Every project comes with a case study.",
+  lede: "Client work for real businesses, and the experiments and prototypes where we try ideas out on our own. Every project comes with a case study. AI, automation, cloud and business-software case studies will be added as that work is delivered.",
   groups: {
     client: {
       title: "Client work",
@@ -87,7 +142,7 @@ export const archiveCopy = {
     lab: {
       title: "Experiments & prototypes",
       intro:
-        "Self-initiated builds. We make these to explore how we'd approach a type of business, or to try an idea before it goes into client work.",
+        "Self-initiated concept builds. We make these to explore how we'd approach a type of business, or to try an idea before it goes into client work.",
       note: "Not client projects — the businesses, people, reviews and numbers inside them are illustrative.",
     },
   },
@@ -101,20 +156,20 @@ export const archiveCopy = {
 
 export const outcomeCopy = {
   heading: { lead: "Not just a screen.", follow: "A working system." },
-  parts: ["Website", "AI", "Mobile", "Software", "Automation", "Data"],
+  parts: ["AI", "Automation", "Software", "Cloud", "Data", "Digital"],
   connected: "All working together.",
-  body: "The goal isn't a pretty interface. It's something your business can run on — it answers customers, saves hours and still makes sense as you grow.",
+  body: "The goal isn't a pretty interface. It's something your business can run on: it answers customers, saves hours, shows you how you're performing and still makes sense as you grow.",
 } as const;
 
 export const studioCopy = {
-  heading: "People who like building things that work.",
+  heading: "An engineering team that starts with the problem.",
   body: [
-    "Boaive comes from boat + thrive: the right product should carry a business forward, not weigh it down.",
-    "We're designers and engineers who'd rather ship something useful than present something impressive. We keep things clear, explain our choices, and stay around after launch.",
+    "Boaive comes from boat + thrive: the right system should carry a business forward, not weigh it down.",
+    "We're an AI and software engineering team that combines product thinking with engineering. We take on the messy, multi-part problems: processes held together by spreadsheets, knowledge nobody can find, systems that don't talk to each other. We explain our choices and stay around after launch.",
   ],
   principles: [
     { title: "Problem first", text: "We work out what you actually need before deciding what to build." },
-    { title: "Plain language", text: "No jargon, no black boxes. You'll always know what's happening and why." },
+    { title: "Plain language", text: "Advanced technology, explained simply. No jargon, no black boxes: you'll always know what's happening and why." },
     { title: "Built to last", text: "Clean, documented work that can grow with you — or be handed over." },
     { title: "In it for the long run", text: "Launch is a beginning. We're here for fixes, changes and the next idea." },
   ],
@@ -125,10 +180,12 @@ export const contactCopy = {
   tagline: "Float your thrive.",
   body: "Tell us what you're trying to do. A short message is enough to start — we'll reply with questions, not a sales pitch.",
   composerLabel: "What do you need?",
+  briefLabel: "What process, system or experience are you trying to improve?",
+  briefPlaceholder: "Optional — e.g. we answer the same questions all day…",
   whatsappCta: "Message us on WhatsApp",
   otherWays: "Or reach us on",
 } as const;
 
 export const footerCopy = {
-  line: "Boaive is a digital studio. We turn ideas and problems into things that work.",
+  line: "Boaive is an AI, software and cloud engineering studio. We build intelligent business systems that work.",
 } as const;
