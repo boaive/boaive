@@ -83,7 +83,7 @@ export function ArchiveGauge({ sections }: { sections: Section[] }) {
             <button type="button" aria-current={current === i ? "step" : undefined} onClick={() => jump(section.id)}>
               <span className={styles.tickLine} aria-hidden="true" />
               <span className={`${styles.tip} mono`}>
-                {String(i + 1).padStart(2, "0")} {section.label}
+                {section.label}
               </span>
             </button>
           </li>

@@ -63,16 +63,6 @@
   color: var(--fg-muted);
 }
 
-.labelNumber {
-  color: var(--accent-soft);
-}
-
-.labelRule {
-  width: 2.5rem;
-  height: 1px;
-  background: var(--line-strong);
-}
-
 /*
  * When a chapter releases, its stage (and label) scrolls up under the transparent header and would
  * collide with the logo. Fade the label out as it nears the header. The padding/negative margin

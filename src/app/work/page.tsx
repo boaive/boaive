@@ -91,10 +91,9 @@ export default function WorkIndexPage() {
 
           <nav aria-label="Archive sections" className={styles.jump}>
             <ol role="list">
-              {groups.map((g, i) => (
+              {groups.map((g) => (
                 <li key={g.id}>
                   <a href={`#${g.id}`}>
-                    <span className={`${styles.jumpNumber} mono`}>{pad(i + 1)}</span>
                     <span className={styles.jumpTitle}>{archiveCopy.groups[g.id].title}</span>
                     <span className={`${styles.jumpCount} mono`}>{pad(g.projects.length)}</span>
                   </a>
@@ -104,8 +103,8 @@ export default function WorkIndexPage() {
           </nav>
         </header>
 
-        {groups.map((group, gi) => (
-          <ArchiveGroup key={group.id} id={group.id} number={gi + 1} projects={group.projects} />
+        {groups.map((group) => (
+          <ArchiveGroup key={group.id} id={group.id} projects={group.projects} />
         ))}
 
         <section id="archive-contact" className={styles.cta} aria-labelledby="archive-cta-title">
@@ -133,7 +132,7 @@ export default function WorkIndexPage() {
   );
 }
 
-function ArchiveGroup({ id, number, projects }: { id: WorkGroupId; number: number; projects: typeof orderedProjects }) {
+function ArchiveGroup({ id, projects }: { id: WorkGroupId; projects: typeof orderedProjects }) {
   const copy = archiveCopy.groups[id];
   const features = id === "client" ? projects.slice(0, FEATURE_ROWS) : [];
   const cards = projects.slice(features.length);
@@ -142,8 +141,6 @@ function ArchiveGroup({ id, number, projects }: { id: WorkGroupId; number: numbe
     <section id={id} className={styles.group} aria-labelledby={`${id}-title`} data-group={id}>
       <header className={styles.groupHead}>
         <p className={`${styles.groupLabel} mono`} data-reveal="">
-          <span className={styles.groupNumber}>{pad(number)}</span>
-          <span className={styles.groupRule} aria-hidden="true" />
           <span>{plural(projects.length)}</span>
         </p>
         <h2 id={`${id}-title`} className={styles.groupTitle} data-reveal="" tabIndex={-1}>
@@ -163,7 +160,7 @@ function ArchiveGroup({ id, number, projects }: { id: WorkGroupId; number: numbe
         <ol role="list" className={styles.features}>
           {features.map((project, i) => (
             <li key={project.slug} data-reveal="">
-              <ArchiveCard project={project} index={i} layout="feature" flip={i % 2 === 1} priority={number === 1 && i === 0} />
+              <ArchiveCard project={project} index={i} layout="feature" flip={i % 2 === 1} priority={id === "client" && i === 0} />
             </li>
           ))}
         </ol>

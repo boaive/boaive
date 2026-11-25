@@ -1,6 +1,6 @@
 import { site } from "@/content/site";
 import { introMessage, whatsappHref } from "@/lib/whatsapp";
-import { InstagramIcon, MailIcon, PhoneIcon, WhatsAppIcon } from "@/components/ui/icons";
+import { InstagramIcon, LinkedInIcon, MailIcon, PhoneIcon, WhatsAppIcon } from "@/components/ui/icons";
 import styles from "./ContactLinks.module.css";
 
 type Props = {
@@ -26,6 +26,13 @@ export function ContactLinks({ whatsapp = true, className, layout = "row" }: Pro
       label: "Instagram",
       value: `@${contact.instagram.handle}`,
       icon: <InstagramIcon size={18} />,
+      external: true,
+    },
+    contact.linkedin.url && {
+      href: contact.linkedin.url,
+      label: "LinkedIn",
+      value: site.name,
+      icon: <LinkedInIcon size={18} />,
       external: true,
     },
     { href: `mailto:${contact.email}`, label: "Email", value: contact.email, icon: <MailIcon size={18} />, external: false },

@@ -41,12 +41,12 @@ export const timing = {
   },
   capabilities: {
     intro: [0, 0.1],
-    items: sequence(6, 0.12, 0.9),
+    items: sequence(7, 0.12, 0.9),
     close: [0.92, 1],
   },
   process: {
     intro: [0, 0.1],
-    steps: sequence(5, 0.12, 0.94, true),
+    steps: sequence(7, 0.12, 0.94, true),
   },
   /** One beat per featured project (the chapter's length grows with the count — see chapters.ts). */
   work: {

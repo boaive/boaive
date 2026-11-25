@@ -44,7 +44,7 @@ export function DepthGauge() {
             >
               <span className={styles.tickLine} aria-hidden="true" />
               <span className={`${styles.tip} mono`}>
-                {String(i + 1).padStart(2, "0")} {c.title}
+                {c.title}
               </span>
             </button>
           </li>

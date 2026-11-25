@@ -71,14 +71,26 @@ export const site = {
   contact: {
     whatsapp: {
       /** International format, digits only — used by wa.me links. */
-      number: "918110823730",
-      display: "+91 81108 23730",
+      number: "919894688279",
+      display: "+91 98946 88279",
     },
     phone: {
-      href: "tel:+918110823730",
-      display: "+91 81108 23730",
+      href: "tel:+919894688279",
+      display: "+91 98946 88279",
     },
-    email: "boaive.tech@gmail.com",
+    email: "contact@boaive.com",
+    /** The official company page; the link is hidden if this is empty. */
+    linkedin: {
+      url: "https://www.linkedin.com/company/boaive/" as string,
+    },
+    /**
+     * The dedicated digital marketing website. Leave empty until it is live; once set,
+     * /digital-marketing (and /marketing) redirect there and the footer links to it.
+     */
+    marketingSite: {
+      url: "" as string,
+      label: "Digital marketing",
+    },
     instagram: {
       handle: "boaive",
       url: "https://www.instagram.com/boaive/",
@@ -96,7 +108,7 @@ export type NavItem = {
 /** Primary navigation — each item jumps to a chapter of the story. */
 export const primaryNav: NavItem[] = [
   { label: "Work", chapter: "work", page: "/work" },
-  { label: "What we build", chapter: "capabilities" },
+  { label: "What we can do for you", chapter: "capabilities" },
   { label: "Process", chapter: "process" },
   { label: "Studio", chapter: "studio" },
   { label: "Contact", chapter: "contact" },

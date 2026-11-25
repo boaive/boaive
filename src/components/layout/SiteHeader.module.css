@@ -224,3 +224,18 @@
     display: none;
   }
 }
+
+/* Phones: a shorter button label, so sound and menu stay on screen. */
+.ctaShort {
+  display: none;
+}
+
+@media (max-width: 460px) {
+  .ctaLong {
+    display: none;
+  }
+
+  .ctaShort {
+    display: inline;
+  }
+}

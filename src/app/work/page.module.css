@@ -214,11 +214,6 @@
   border-left: 1px solid var(--line);
 }
 
-.jumpNumber {
-  font-size: var(--fs-micro);
-  color: var(--accent-soft);
-}
-
 .jumpTitle {
   flex: 1 1 auto;
   font-size: var(--fs-h4);
@@ -256,16 +251,6 @@
   align-items: center;
   gap: 0.9em;
   color: var(--fg-muted);
-}
-
-.groupNumber {
-  color: var(--accent-soft);
-}
-
-.groupRule {
-  flex: 1 1 auto;
-  height: 1px;
-  background: linear-gradient(to right, var(--line-strong), var(--line) 70%);
 }
 
 .groupTitle {

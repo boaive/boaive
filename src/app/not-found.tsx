@@ -7,6 +7,7 @@ import styles from "./not-found.module.css";
 
 export const metadata: Metadata = {
   title: "Page not found",
+  robots: { index: false, follow: true },
 };
 
 /** 404 — back on the surface at blue hour, the boat still on the horizon. */

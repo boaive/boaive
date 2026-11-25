@@ -19,6 +19,12 @@ Brand name is always **Boaive**. Don't use "Boaive Tech" / "Boaive Technologies"
 | sitemap.xml (home + case studies + images), robots.txt, manifest, share image | `src/app/sitemap.ts`, `robots.ts`, `manifest.ts`, `opengraph-image.jpg` |
 | Search Console HTML-tag verification (optional) | env var `GOOGLE_SITE_VERIFICATION` |
 
+### Indexing controls
+- Indexed: `/`, `/work`, `/work/<project>` (all in the sitemap).
+- Not indexed: the 404 page (`noindex`), the Search Console file and manifest (`X-Robots-Tag: noindex`), developer switches `?debug`, `?quality=`, `?dpr=`, `?3d=` (blocked in robots.txt; canonical points to `/`), Vercel preview deployments (`noindex` header on every page).
+- `boaive.vercel.app` and `www.boaive.com` 301 to `https://boaive.com`.
+- To remove a URL that is already in Google: make sure it returns 404/410 or redirects, then Search Console → Removals → Temporary removal, and URL Inspection → Request indexing for its replacement.
+
 Never add hidden keyword text to pages — Google treats it as spam.
 
 ## 2. Ranking for more searches later
@@ -43,7 +49,7 @@ Boaive has no public street address, so set it up as a **service-area business**
 - Name: **Boaive** (no keywords in the name — that violates GBP rules)
 - Primary category: *Website designer*; secondary: *Web developer* (optionally *Internet marketing service* only if offered)
 - Service areas: Chengalpattu, Chennai (add nearby areas you genuinely serve)
-- Website: `https://boaive.com` ; phone: +91 81108 23730
+- Website: `https://boaive.com` ; phone: +91 98946 88279
 - Description: reuse the positioning line + 2–3 sentences from `/about`
 - Services: one per landing page, same names
 - Photos: logo, cover, screenshots of real projects

@@ -35,7 +35,17 @@ export function ScrollDirector() {
     let lenis: Lenis | null = null;
     let tick: ((time: number) => void) | null = null;
     if (!reduced) {
-      lenis = new Lenis({ autoRaf: false, lerp: 0.1, smoothWheel: true, wheelMultiplier: 0.9 });
+      lenis = new Lenis({
+        autoRaf: false,
+        lerp: 0.085,
+        smoothWheel: true,
+        wheelMultiplier: 0.7,
+        virtualScroll: (data) => {
+          if (!lenis || !data.event.type.includes("wheel")) return true;
+          data.deltaY = limitWheel(data.deltaY, lenis.targetScroll - lenis.animatedScroll);
+          return true;
+        },
+      });
       lenis.on("scroll", ScrollTrigger.update);
       tick = (time: number) => lenis?.raf(time * 1000);
       gsap.ticker.add(tick);
@@ -95,6 +105,24 @@ export function ScrollDirector() {
   }, []);
 
   return null;
+}
+
+/** Largest scroll one wheel event can add, in px (a free-spinning wheel or a hard trackpad flick sends huge deltas). */
+const WHEEL_STEP_MAX = 90;
+/** How far the smooth scroll may run ahead of what's on screen, in viewport heights. */
+const WHEEL_AHEAD_MAX = 0.45;
+
+/**
+ * Keeps wheel scrolling controlled: each event is capped, and once the scroll is already
+ * far ahead in the same direction, further input in that direction is ignored until it catches up.
+ * (Returns a tiny delta rather than 0, so the event is still handled here and not by the browser.)
+ */
+function limitWheel(delta: number, ahead: number): number {
+  const step = Math.max(-WHEEL_STEP_MAX, Math.min(WHEEL_STEP_MAX, delta));
+  if (Math.sign(step) === Math.sign(ahead) && Math.abs(ahead) > WHEEL_AHEAD_MAX * window.innerHeight) {
+    return Math.sign(step) * 0.001;
+  }
+  return step;
 }
 
 const parseRange = (value: string | undefined): [number, number] => {

@@ -5,10 +5,9 @@ import { StepNav } from "@/components/ui/StepNav";
 import { Beats, Chapter, ChapterLabel } from "./Chapter";
 import styles from "./CapabilitiesSection.module.css";
 
-/** 04 — What we build. Six capabilities emerge from the world, one at a time. */
+/** 04 — What we build. The services emerge from the world, one at a time. */
 export function CapabilitiesSection() {
   const t = timing.capabilities;
-  const total = String(capabilities.length).padStart(2, "0");
   return (
     <Chapter id="capabilities" stageClassName={styles.stage}>
       <ChapterLabel id="capabilities" className={styles.label} />
@@ -29,27 +28,11 @@ export function CapabilitiesSection() {
             data-fade="0.028"
             aria-labelledby={`capability-${cap.id}`}
           >
-            <p className={`${styles.count} mono`}>
-              <span className="accent">{String(i + 1).padStart(2, "0")}</span> / {total}
-            </p>
             <h3 id={`capability-${cap.id}`} className={`${styles.name} t-display legible`}>
               {cap.name}
             </h3>
             <p className={`${styles.headline} t-h4 legible`}>{cap.headline}</p>
-            <dl className={styles.flow}>
-              {(
-                [
-                  ["Problem", cap.problem],
-                  ["What we build", cap.build],
-                  ["Outcome", cap.outcome],
-                ] as const
-              ).map(([label, text]) => (
-                <div key={label} className={styles.row}>
-                  <dt className="mono">{label}</dt>
-                  <dd className="legible">{text}</dd>
-                </div>
-              ))}
-            </dl>
+            <p className={`${styles.description} legible`}>{cap.description}</p>
           </article>
         ))}
 
@@ -61,7 +44,7 @@ export function CapabilitiesSection() {
 
       <StepNav
         chapter="capabilities"
-        label="Capabilities"
+        label="Services"
         className={styles.index}
         steps={capabilities.map((cap, i) => ({ id: cap.id, label: cap.short, range: [...t.items[i]] as [number, number] }))}
       />

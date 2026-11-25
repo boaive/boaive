@@ -40,7 +40,7 @@ export function organization(): Node {
       addressCountry: site.location.country,
     },
     areaServed,
-    sameAs: [site.contact.instagram.url],
+    sameAs: [site.contact.instagram.url, site.contact.linkedin.url].filter(Boolean),
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "sales",
@@ -57,6 +57,7 @@ export function organization(): Node {
       "Cloud engineering",
       "DevOps",
       "Data analytics",
+      "Digital marketing",
       "Web development",
       ...capabilities.flatMap((c) => c.items),
     ],

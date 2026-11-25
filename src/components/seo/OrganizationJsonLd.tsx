@@ -13,7 +13,7 @@ export function OrganizationJsonLd() {
       name: "What we build",
       itemListElement: capabilities.map((c) => ({
         "@type": "Offer",
-        itemOffered: { "@type": "Service", name: c.name, description: c.build },
+        itemOffered: { "@type": "Service", name: c.name, description: c.description },
       })),
     },
     subjectOf: orderedProjects.map((p) => ({ "@type": "CreativeWork", name: p.title, url: `${site.url}/work/${p.slug}` })),

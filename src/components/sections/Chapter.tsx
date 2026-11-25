@@ -1,5 +1,5 @@
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
-import { chapterNumber, getChapter, type ChapterId } from "@/story/chapters";
+import { getChapter, type ChapterId } from "@/story/chapters";
 import styles from "./Chapter.module.css";
 
 type ChapterProps = {
@@ -35,7 +35,7 @@ export function Chapter({ id, children, pinned = true, className, stageClassName
   );
 }
 
-/** Mono chapter label: "04 — What we build". */
+/** Mono chapter label: the section title only. */
 export function ChapterLabel({
   id,
   children,
@@ -44,8 +44,6 @@ export function ChapterLabel({
 }: { id: ChapterId; children?: ReactNode; className?: string } & Omit<HTMLAttributes<HTMLParagraphElement>, "id">) {
   return (
     <p className={["mono", styles.label, className].filter(Boolean).join(" ")} {...rest}>
-      <span className={styles.labelNumber}>{chapterNumber(id)}</span>
-      <span aria-hidden="true" className={styles.labelRule} />
       <span>{children ?? getChapter(id).title}</span>
     </p>
   );

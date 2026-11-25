@@ -19,8 +19,6 @@ type Props = {
   label: string;
   className?: string;
   itemClassName?: string;
-  /** Show 01, 02… before each label. */
-  numbered?: boolean;
   /** Rendered after the steps, inside the nav (e.g. a link out of the chapter). */
   after?: ReactNode;
 };
@@ -29,11 +27,11 @@ type Props = {
  * In-chapter index (capabilities, process, work). The ScrollDirector marks the active step
  * with aria-current; clicking scrolls the story to that step.
  */
-export function StepNav({ chapter, steps, label, className, itemClassName, numbered = true, after }: Props) {
+export function StepNav({ chapter, steps, label, className, itemClassName, after }: Props) {
   return (
     <nav aria-label={label} className={className}>
       <ol role="list" data-steps="">
-        {steps.map((step, i) => (
+        {steps.map((step) => (
           <li
             key={step.id}
             data-step={step.range.join(",")}
@@ -44,7 +42,6 @@ export function StepNav({ chapter, steps, label, className, itemClassName, numbe
               type="button"
               onClick={() => scrollToChapterProgress(chapter, Math.min(step.range[1], step.range[0] + 0.035))}
             >
-              {numbered ? <span className="mono" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span> : null}
               <span>{step.label}</span>
               {step.meta ? <span className="mono">{step.meta}</span> : null}
             </button>
