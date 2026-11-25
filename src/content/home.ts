@@ -37,7 +37,7 @@ export const problemCopy = {
 export const capabilitiesCopy = {
   heading: "Built around what your business actually needs.",
   intro:
-    "We don't sell fixed packages. These are the six areas we engineer in, and most real projects combine a few of them.",
+    "We don't sell fixed packages. Most real projects combine a few of these.",
   close: {
     lead: "Doesn't fit a box? Good.",
     follow: "Bring the problem. We'll figure out what needs to be built.",
@@ -66,8 +66,8 @@ export const stackCopy = {
 
 export const useCasesCopy = {
   heading: "What we can build for your business.",
-  intro: "Concrete examples of what you can buy, grouped by the outcome you're after.",
-  note: "These are example solutions we can build. They are concepts, not completed client deployments.",
+  intro: "A few ways we can help, grouped by the outcome you're after.",
+  note: "These are areas we are actively expanding into.",
   groups: [
     {
       outcome: "Reduce repetitive work",
@@ -99,9 +99,8 @@ export const useCasesCopy = {
 } as const;
 
 export const processCopy = {
-  heading: "How we engineer.",
-  intro:
-    "Five steps, in plain language. Security, scalability, maintainability and integrations are planned in from the start, where they matter.",
+  heading: "Our delivery process.",
+  intro: "In plain language, from your first message to growth after launch.",
   deliverableLabel: "You get",
 } as const;
 
@@ -156,22 +155,22 @@ export const archiveCopy = {
 
 export const outcomeCopy = {
   heading: { lead: "Not just a screen.", follow: "A working system." },
-  parts: ["AI", "Automation", "Software", "Cloud", "Data", "Digital"],
+  parts: ["AI", "Automation", "Software", "Cloud", "Analytics", "Web & Apps", "Marketing"],
   connected: "All working together.",
   body: "The goal isn't a pretty interface. It's something your business can run on: it answers customers, saves hours, shows you how you're performing and still makes sense as you grow.",
 } as const;
 
 export const studioCopy = {
-  heading: "An engineering team that starts with the problem.",
+  heading: "Technology that moves your business forward.",
   body: [
-    "Boaive comes from boat + thrive: the right system should carry a business forward, not weigh it down.",
-    "We're an AI and software engineering team that combines product thinking with engineering. We take on the messy, multi-part problems: processes held together by spreadsheets, knowledge nobody can find, systems that don't talk to each other. We explain our choices and stay around after launch.",
+    "Boaive comes from boat + thrive: the right technology should carry your business forward, not weigh it down.",
+    "We help you build what you need, simplify how work gets done and grow your business, with a team that stays with you after launch.",
   ],
   principles: [
-    { title: "Problem first", text: "We work out what you actually need before deciding what to build." },
-    { title: "Plain language", text: "Advanced technology, explained simply. No jargon, no black boxes: you'll always know what's happening and why." },
-    { title: "Built to last", text: "Clean, documented work that can grow with you — or be handed over." },
-    { title: "In it for the long run", text: "Launch is a beginning. We're here for fixes, changes and the next idea." },
+    { title: "Understand your business", text: "We learn how you work and what you want to achieve before suggesting anything." },
+    { title: "Explain things clearly", text: "Plain language, no jargon. You'll know what we're doing and why." },
+    { title: "Build for growth", text: "Clean, documented work that can grow with you, or be handed over." },
+    { title: "Support beyond launch", text: "Fixes, changes and the next idea: we're still here after go-live." },
   ],
 } as const;
 

@@ -429,8 +429,60 @@ function FormCustom({ index, m }: { index: number; m: Mats }) {
   );
 }
 
-// Same order as `capabilities` (data/capabilities.ts): AI, Automation, Software, Cloud, Data, Digital.
-const FORMS = [FormAI, FormAutomation, FormSoftware, FormCustom, FormWeb, FormMobile];
+// ── MARKETING: a message going out, results coming up ─────────────────────────
+const BARS = [0.35, 0.6, 0.9, 1.3];
+
+function FormMarketing({ index, m }: { index: number; m: Mats }) {
+  const rings = useRef<(Group | null)[]>([]);
+  const bars = useRef<(Group | null)[]>([]);
+  const phase = useRef(0);
+  const assets = useMemo(() => {
+    const bar = new BoxGeometry(0.34, 1, 0.34);
+    return {
+      bar,
+      barEdges: edgesOf(bar),
+      ring: new TorusGeometry(1, 0.016, 8, 64),
+      source: new SphereGeometry(0.16, 20, 14),
+    };
+  }, []);
+  useFrame((_, dt) => {
+    if (hidden()) return;
+    const a = formsState.activity[index];
+    phase.current += dt * (0.08 + 0.22 * a) * frame.motion;
+    rings.current.forEach((g, i) => {
+      if (!g) return;
+      const u = (phase.current + i / 3) % 1;
+      // grows from the source and thins away before it starts again
+      g.scale.set(0.2 + u, 0.2 + u, Math.max(0.05, 1 - u));
+    });
+    const grow = 0.55 + 0.45 * easeInOutCubic(clamp(a));
+    bars.current.forEach((g, i) => {
+      if (g) g.scale.y = BARS[i] * grow;
+    });
+  });
+  return (
+    <group position={[0, -0.2, 0]}>
+      <group position={[0, 0.8, 0]}>
+        <mesh geometry={assets.source} material={m.accent} />
+        {[0, 1, 2].map((i) => (
+          <group key={i} ref={(g) => void (rings.current[i] = g)}>
+            <mesh geometry={assets.ring} material={m.node} />
+          </group>
+        ))}
+      </group>
+      {BARS.map((_, i) => (
+        // anchored at the base, so scaling grows the bar upward
+        <group key={i} position={[-0.78 + i * 0.52, -0.95, 0.35]} ref={(g) => void (bars.current[i] = g)}>
+          <mesh geometry={assets.bar} material={i === BARS.length - 1 ? m.accent : m.glass} position={[0, 0.5, 0]} />
+          <lineSegments geometry={assets.barEdges} material={m.edge} position={[0, 0.5, 0]} />
+        </group>
+      ))}
+    </group>
+  );
+}
+
+// Same order as `capabilities` (data/capabilities.ts): AI, Automation, Software, Cloud, Data, Digital, Marketing.
+const FORMS = [FormAI, FormAutomation, FormSoftware, FormCustom, FormWeb, FormMobile, FormMarketing];
 
 /** A form on the ring, facing outward (toward the camera's orbit). */
 function Station({ index, children }: { index: number; children: ReactNode }) {

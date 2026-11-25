@@ -27,6 +27,13 @@ export function SiteFooter() {
                 {workCopy.allWork} <span aria-hidden="true">→</span>
               </Link>
             </li>
+            {site.contact.marketingSite.url ? (
+              <li>
+                <a href={site.contact.marketingSite.url} target="_blank" rel="noopener">
+                  {site.contact.marketingSite.label} <span aria-hidden="true">↗</span>
+                </a>
+              </li>
+            ) : null}
           </ul>
         </nav>
         <ContactLinks layout="column" className={styles.contact} />

@@ -14,6 +14,9 @@ export function capabilityActivity(i: number, t: number): number {
   return window01(a, b, p, 0.035);
 }
 
+/** The 3D product has five stages; later steps (monitor, promote) hold the finished one. */
+const BUILD_STAGES = 5;
+
 /** Continuous build stage 0..5 through the process chapter. */
 export function buildStage(t: number): number {
   const p = pinnedAt("process", t);
@@ -22,9 +25,9 @@ export function buildStage(t: number): number {
   for (let i = 0; i < steps.length; i++) {
     const [a, b] = steps[i];
     // most of the transformation happens early in each step, then it holds for reading
-    if (p < b || i === steps.length - 1) return i + clamp(invLerp(a, a + (b - a) * 0.7, p));
+    if (p < b || i === steps.length - 1) return Math.min(BUILD_STAGES, i + clamp(invLerp(a, a + (b - a) * 0.7, p)));
   }
-  return steps.length;
+  return BUILD_STAGES;
 }
 
 /** How "on" project i is in the work chapter. */

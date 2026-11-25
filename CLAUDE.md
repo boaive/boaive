@@ -4,7 +4,7 @@
 
 Official site for **Boaive** ("Float Your Thrive", boat + thrive), an AI, custom software and cloud engineering studio (websites and apps are one capability, not the identity). The home page is one continuous, scroll-driven 3D story; `BOAIVE_CONCEPT.md` is the creative/technical source of truth — read it before changing the story, visual language or 3D architecture.
 
-Story: boat at night → laptop slips overboard → dive → into the screen → digital deep → problem → what we build (6 capabilities: AI, Automation, Software, Cloud, Data, Digital) → technology stack → use cases → how we engineer (5 steps) → work → outcome ("Not just a screen. A working system.") → studio → surface at sunrise (the boat returns with the finished product) → "Let's build".
+Story: boat at night → laptop slips overboard → dive → into the screen → digital deep → problem → what we can do for you (7 services: AI, Automation, Software, Cloud, Analytics, Web & Apps, Marketing) → technology stack → use cases → our delivery process (7 steps) → work → outcome ("Not just a screen. A working system.") → studio → surface at sunrise (the boat returns with the finished product) → "Let's build".
 
 ## Commands
 
@@ -39,6 +39,7 @@ Next.js 16 App Router (Turbopack) · React 19 · TypeScript · React Three Fiber
 ## How the story works
 
 - Each chapter is a tall `<section data-chapter>` with a sticky 100svh stage; length comes from `chapters.ts`. Chapter triggers are contiguous, so **story time = chapter index + chapter progress**. Scroll never re-renders React; the 3D reads `story`/`frame` in `useFrame`.
+- Wheel scrolling is limited in `ScrollDirector` (`wheelMultiplier`, `WHEEL_STEP_MAX` per event, `WHEEL_AHEAD_MAX` viewport heights ahead) so a fast flick can't skip chapters; touch scrolling stays native.
 - Pinned progress `p` (0 = stage pins, 1 = releases) is the beat coordinate. `timeAt(ch, p)` → story time; `handoffTimeAt(ch, h)` covers the hand-off while a chapter slides in; `pinnedAt(ch, t)` inverts.
 - Declarative choreography (ScrollDirector): `data-beat="in,out"` (+ `data-dy`, `data-fade`), `data-rise` (+ `data-rise-compact` for ≤1200px), `data-progress` (→ `--p`), `data-steps`/`data-step` (→ `aria-current`). Layouts that need room (e.g. the Problem chapter's floating needs) switch to a stacked version at the same `COMPACT` breakpoint — test phones down to 320×568. Ranges come from `timing.ts`, which the 3D also imports — text and camera stay in sync. Beats are hidden via `.js [data-beat]` in `globals.css`.
 - Camera: `KeySpec` keys per world (`oceanTracks`, `digitalTracks`, `surfaceTracks`), Catmull-Rom, lens shift keeps subjects clear of the text (`projectionMatrix.elements[8] = -sx`, `[9] = -sy`); portrait uses `shiftPortrait`/`backPortrait`. Reduced motion holds still keys and cross-fades (`frame.t` is held, so derive scene state from `frame.t`, not wall-clock).
@@ -58,7 +59,7 @@ Next.js 16 App Router (Turbopack) · React 19 · TypeScript · React Three Fiber
 
 - Never invent client results, metrics, testimonials or users. `outcome` stays undefined unless real.
 - Never present experiments/prototypes as client work. The only client project today is **Shapio 3D** (its copy has a `reviewNote` to confirm with the team before launch). Clinic, Restaurant and Play are experiments.
-- Contact: WhatsApp **+91 81108 23730** (primary, `wa.me/918110823730`), Instagram **@boaive**, email **boaive.tech@gmail.com**, phone same number. WhatsApp is always the primary CTA.
+- Contact: WhatsApp **+91 98946 88279** (primary, `wa.me/919894688279`), Instagram **@boaive**, email **contact@boaive.com**, phone same number. LinkedIn **linkedin.com/company/boaive**. WhatsApp is always the primary CTA.
 - Copy is short and concrete; banned: "unlock", "revolutionize", "next-generation", "cutting-edge".
 
 ## Gotchas
@@ -87,5 +88,6 @@ WebGL screenshots need a real GPU in headless Chrome: `--use-angle=d3d11 --enabl
 
 ## Open items
 
+- Digital marketing website: set `site.contact.marketingSite.url` when it is live → `/digital-marketing` and `/marketing` redirect there (next.config.ts) and the footer links to it.
 - Production domain: set `NEXT_PUBLIC_SITE_URL` (sitemap, robots, canonical and OG URLs use it).
 - Shapio 3D case study copy needs the team's confirmation (`reviewNote` in `projects.ts`).

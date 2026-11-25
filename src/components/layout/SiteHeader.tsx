@@ -23,13 +23,15 @@ export function SiteHeader() {
   const menuRef = useRef<HTMLDialogElement>(null);
   const headerRef = useRef<HTMLElement>(null);
 
-  // Flowing pages scroll content under the header: give it a backing once scrolled.
-  // (The home story keeps it clear — its stages are laid out around it.)
+  // Flowing content scrolls under the header: give it a backing there.
+  // (The pinned chapters of the home story keep it clear: their stages are laid out around it.)
+  const overFlow = active === "stack" || active === "usecases" || active === "studio";
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
     if (onHome) {
-      delete header.dataset.solid;
+      if (overFlow) header.dataset.solid = "";
+      else delete header.dataset.solid;
       return;
     }
     const onScroll = () => {
@@ -39,7 +41,7 @@ export function SiteHeader() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [onHome]);
+  }, [onHome, overFlow]);
 
   useEffect(() => {
     const menu = menuRef.current;
@@ -85,7 +87,8 @@ export function SiteHeader() {
           <SoundToggle />
         </span>
         <Button href={whatsappHref(introMessage())} external size="sm" icon={<ArrowUpRight size={15} />} className={styles.cta}>
-          Discuss a project
+          <span className={styles.ctaLong}>Discuss a project</span>
+          <span className={styles.ctaShort}>Let&apos;s talk</span>
         </Button>
         {/* Compact screens: an icon beside the menu button, in the same spot as in the open menu. */}
         <span className={styles.soundCompact}>
@@ -117,7 +120,7 @@ export function SiteHeader() {
           </div>
           <nav aria-label="Menu">
             <ol role="list" className={styles.menuNav}>
-              {primaryNav.map((item, i) => (
+              {primaryNav.map((item) => (
                 <li key={item.chapter}>
                   <ChapterLink
                     chapter={item.chapter}
@@ -125,7 +128,6 @@ export function SiteHeader() {
                     className={styles.menuLink}
                     onNavigate={() => setMenuOpen(false)}
                   >
-                    <span className="mono">{String(i + 1).padStart(2, "0")}</span>
                     {item.label}
                   </ChapterLink>
                 </li>

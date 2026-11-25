@@ -4,14 +4,14 @@ import { DIGITAL_ORIGIN } from "../worlds";
 /**
  * Where everything sits inside the digital deep (local coordinates; add DIGITAL_ORIGIN for world).
  *
- *   the ring        six capability forms around a centre — "what we build"
- *   the centre      where the product is built, step by step — "how we build"
+ *   the ring        seven service forms around a centre — "what we can do for you"
+ *   the centre      where the product is built, step by step — "our delivery process"
  *   the gallery     an arc of project screens above the ring — "work"
  * Seen together from above, connected by light — "outcome".
  */
 export const RING_CENTRE = new Vector3(0, 3, 0);
 export const RING_RADIUS = 9.5;
-export const FORM_COUNT = 6;
+export const FORM_COUNT = 7;
 
 /** Angle of capability i on the ring (the first faces the entry, then clockwise). */
 export const formAngle = (i: number) => Math.PI / 2 - i * ((Math.PI * 2) / FORM_COUNT);

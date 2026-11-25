@@ -44,9 +44,12 @@ function processShot(deg: number, r: number, y: number): Pick<KeySpec, "pos" | "
   };
 }
 
+/** Lens shift per service: Digital (the phones, index 5) sits a little further left. */
+const capabilityShift = (i: number) => (i === 5 ? 0.19 : 0.3);
+
 const capabilityKeys: KeySpec[] = timing.capabilities.items.flatMap(([a, b], i) => [
-  { at: () => timeAt("capabilities", a + 0.02), ...formShot(i), fov: 38, shift: [0.3, 0.02], shiftPortrait: [0, 0.2], backPortrait: 1.25, ease: "inOut" as const },
-  { at: () => timeAt("capabilities", b - 0.025), ...formShot(i), fov: 37, shift: [0.3, 0.02], shiftPortrait: [0, 0.2], backPortrait: 1.25 },
+  { at: () => timeAt("capabilities", a + 0.02), ...formShot(i), fov: 38, shift: [capabilityShift(i), 0.02], shiftPortrait: [0, 0.2], backPortrait: 1.25, ease: "inOut" as const },
+  { at: () => timeAt("capabilities", b - 0.025), ...formShot(i), fov: 37, shift: [capabilityShift(i), 0.02], shiftPortrait: [0, 0.2], backPortrait: 1.25 },
 ]);
 
 const workKeys: KeySpec[] = timing.work.projects.flatMap(([a, b], i) => [

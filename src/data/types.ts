@@ -1,4 +1,4 @@
-export type CapabilityId = "ai" | "automation" | "software" | "cloud" | "data" | "digital";
+export type CapabilityId = "ai" | "automation" | "software" | "cloud" | "data" | "digital" | "marketing";
 
 export interface Capability {
   id: CapabilityId;
@@ -7,16 +7,12 @@ export interface Capability {
   short: string;
   /** One confident line. */
   headline: string;
-  /** The business problem it answers. */
-  problem: string;
-  /** What Boaive builds. */
-  build: string;
-  /** The practical outcome, stated without invented metrics. */
-  outcome: string;
+  /** One short, plain sentence. */
+  description: string;
   items: string[];
 }
 
-export type ProcessStepId = "understand" | "design" | "build" | "refine" | "launch";
+export type ProcessStepId = "understand" | "design" | "build" | "refine" | "launch" | "monitor" | "promote";
 
 export interface ProcessStep {
   id: ProcessStepId;

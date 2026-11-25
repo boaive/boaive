@@ -127,3 +127,12 @@ export function SoundIcon({ on, ...props }: IconProps & { on: boolean }) {
     </Icon>
   );
 }
+
+export function LinkedInIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <rect x="3" y="3" width="18" height="18" rx="3" />
+      <path d="M7.5 10.5V17M7.5 7.2v.1M11.5 17v-6.5M11.5 13.2c0-1.6 1.1-2.7 2.6-2.7s2.4 1 2.4 2.9V17" />
+    </Icon>
+  );
+}

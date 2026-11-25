@@ -1,10 +1,10 @@
 import type { ProcessStep } from "./types";
 
-/** Order matters: the 3D build object transforms through these stages in sequence. */
+/** Order matters: the 3D build object transforms through the first five; the last two hold the finished product. */
 export const processSteps: ProcessStep[] = [
   {
     id: "understand",
-    name: "Discover",
+    name: "Understand",
     description: "We learn the problem, the business, the people and the existing systems before choosing any technology.",
     deliverable: "Requirements and scope, written in plain language.",
   },
@@ -31,5 +31,17 @@ export const processSteps: ProcessStep[] = [
     name: "Deploy",
     description: "We deploy, hand it over properly and stay around for what comes next.",
     deliverable: "A live system, handover documentation, and someone to call when you need changes.",
+  },
+  {
+    id: "monitor",
+    name: "Monitor",
+    description: "We track how it performs and how people use it, then improve what the numbers point to.",
+    deliverable: "Analytics and performance tracking you can read.",
+  },
+  {
+    id: "promote",
+    name: "Promote",
+    description: "We help the right people find it, with marketing planned around your goals.",
+    deliverable: "A campaign plan for the channels that suit you.",
   },
 ];

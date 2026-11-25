@@ -115,10 +115,9 @@ export function WorkSection() {
             <ol role="list" className={styles.moreGroups}>
               {workGroups
                 .filter((g) => g.projects.length)
-                .map((g, i) => (
+                .map((g) => (
                   <li key={g.id}>
                     <Link href={`/work#${g.id}`}>
-                      <span className="mono">{pad(i + 1)}</span>
                       <span className={styles.moreGroupTitle}>{groupTitle[g.id]}</span>
                       <span className={`${styles.moreCount} mono`}>{pad(g.projects.length)}</span>
                     </Link>

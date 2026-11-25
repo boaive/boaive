@@ -15,10 +15,10 @@ export const chapters = [
   { id: "float", title: "Float", depth: 0, world: "ocean", length: { desktop: 2.9, mobile: 2.5 } },
   { id: "dive", title: "Dive", depth: 2, world: "ocean", length: { desktop: 3.4, mobile: 2.9 } },
   { id: "problem", title: "The problem", depth: 40, world: "digital", length: { desktop: 3.0, mobile: 2.7 } },
-  { id: "capabilities", title: "What we build", depth: 70, world: "digital", length: { desktop: 5.4, mobile: 4.8 } },
+  { id: "capabilities", title: "What we can do for you", depth: 70, world: "digital", length: { desktop: 6.2, mobile: 5.5 } },
   { id: "stack", title: "Technology", depth: 85, world: "digital", length: { desktop: 1.6, mobile: 1.6 } },
   { id: "usecases", title: "Use cases", depth: 100, world: "digital", length: { desktop: 1.8, mobile: 1.8 } },
-  { id: "process", title: "How we engineer", depth: 110, world: "digital", length: { desktop: 4.8, mobile: 4.2 } },
+  { id: "process", title: "Our delivery process", depth: 110, world: "digital", length: { desktop: 6.4, mobile: 5.6 } },
   { id: "work", title: "Work", depth: 140, world: "digital", length: { desktop: 1.8 + featured * 0.95, mobile: 1.6 + featured * 0.85 } },
   { id: "outcome", title: "Outcome", depth: 120, world: "digital", length: { desktop: 2.6, mobile: 2.3 } },
   { id: "studio", title: "Studio", depth: 80, world: "digital", length: { desktop: 2.2, mobile: 2.0 } },
@@ -35,11 +35,6 @@ export const chapterIndex = Object.fromEntries(chapters.map((c, i) => [c.id, i])
 
 export function getChapter(id: ChapterId): Chapter {
   return chapters[chapterIndex[id]];
-}
-
-/** Two-digit chapter number for labels: "01", "02"… */
-export function chapterNumber(id: ChapterId): string {
-  return String(chapterIndex[id] + 1).padStart(2, "0");
 }
 
 /** Depth (metres) at a given story time, for the depth gauge. */

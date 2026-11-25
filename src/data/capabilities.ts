@@ -3,7 +3,7 @@ import type { Capability } from "./types";
 /**
  * Order matters: it is the order of the six forms on the ring in the 3D world
  * (see FORMS in experience/objects/digital/CapabilityForms.tsx).
- * Each card reads: business problem → what we build → practical outcome.
+ * Cards show the name, one headline and one short description. Keep it brief.
  */
 export const capabilities: Capability[] = [
   {
@@ -11,9 +11,7 @@ export const capabilities: Capability[] = [
     short: "AI",
     name: "AI & Agentic Systems",
     headline: "AI that takes real work off your team.",
-    problem: "Staff lose hours searching documents, answering the same questions and sorting information by hand.",
-    build: "AI assistants, retrieval-augmented generation (RAG) knowledge assistants, LLM integrations, multi-step agent workflows and document intelligence.",
-    outcome: "Answers in seconds, from your own documents, and less repetitive thinking for your team.",
+    description: "Assistants and agent workflows that answer questions, read your documents and handle the repetitive thinking.",
     items: ["AI assistants", "RAG & knowledge assistants", "LLM integrations", "Agent workflows", "Document intelligence"],
   },
   {
@@ -21,9 +19,7 @@ export const capabilities: Capability[] = [
     short: "Automation",
     name: "Intelligent Automation",
     headline: "Less manual work. Fewer things forgotten.",
-    problem: "Work moves between people, spreadsheets and inboxes, and steps get missed.",
-    build: "Workflow orchestration, API integrations, approval flows, data extraction and operational automations that connect the tools you already use.",
-    outcome: "Routine steps run by themselves, approvals are tracked, and your team handles only the exceptions.",
+    description: "We connect the tools you already use and automate the steps your team repeats every day.",
     items: ["Workflow orchestration", "API integrations", "Process automation", "Approval flows", "Data extraction"],
   },
   {
@@ -31,9 +27,7 @@ export const capabilities: Capability[] = [
     short: "Software",
     name: "Custom Software & Platforms",
     headline: "The system behind the business.",
-    problem: "Off-the-shelf tools don't match how you work, so you bend your process around the software.",
-    build: "Business management systems, internal portals, SaaS products, dashboards, backend services and APIs, designed around your workflow.",
-    outcome: "One place to run operations, built to grow with the business instead of holding it back.",
+    description: "Business systems, portals, dashboards and APIs built around how you actually work.",
     items: ["Business systems", "Internal portals", "SaaS products", "Backend services", "API development"],
   },
   {
@@ -41,29 +35,31 @@ export const capabilities: Capability[] = [
     short: "Cloud",
     name: "Cloud & DevOps Engineering",
     headline: "Software that ships safely and stays up.",
-    problem: "Releases are manual and risky, and nobody sees a problem until a customer reports it.",
-    build: "Cloud architecture, containerisation, CI/CD, infrastructure automation, deployment pipelines, observability and reliability engineering.",
-    outcome: "Repeatable deployments, visibility into how systems behave, and fewer surprises in production.",
+    description: "Cloud setup, automated releases and monitoring, so your software ships safely and stays up.",
     items: ["Cloud architecture", "Containers", "CI/CD pipelines", "Infrastructure automation", "Observability"],
   },
   {
     id: "data",
-    short: "Data",
+    short: "Analytics",
     name: "Data & Analytics",
     headline: "See how the business is actually performing.",
-    problem: "Data is spread across tools and files, so reports take days and decisions rely on guesswork.",
-    build: "Data pipelines, reporting dashboards, business intelligence, data integration and operational insights.",
-    outcome: "One trusted view of performance, updated automatically and easy to read.",
+    description: "Reports and dashboards that bring your numbers into one clear, up-to-date view.",
     items: ["Data pipelines", "Reporting dashboards", "Business intelligence", "Data integration", "Operational insights"],
   },
   {
     id: "digital",
-    short: "Digital",
-    name: "Digital Experiences",
+    short: "Web & Apps",
+    name: "Websites & Apps",
     headline: "Websites and apps people actually use.",
-    problem: "Your customers' first contact with you is slow, unclear or hard to use.",
-    build: "High-performance websites, web applications, e-commerce and mobile applications, fast, findable and easy to update.",
-    outcome: "A clear front door for customers, connected to the systems behind it.",
+    description: "Websites, web apps, online stores and mobile apps that are fast, findable and easy to update.",
     items: ["Websites", "Web applications", "E-commerce", "Mobile applications"],
+  },
+  {
+    id: "marketing",
+    short: "Marketing",
+    name: "Digital Marketing",
+    headline: "Reach the people you want to work with.",
+    description: "B2B LinkedIn campaigns, Meta ads and campaign planning for both B2B and B2C businesses.",
+    items: ["B2B LinkedIn campaigns", "Meta ads", "Campaign planning for B2B & B2C"],
   },
 ];
